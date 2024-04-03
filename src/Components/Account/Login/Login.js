@@ -1,50 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import api from '../../../api/axiosConfig';
 
 export default function Login() {
+    const [usernameTxt, setUsername] = useState('');
+    const [passwordTxt, setPassword] = useState('');
     const navigate = useNavigate();
     const registerPage = () => {
         navigate('/register')
     };
 
+    const home = () => {
+        navigate('/home')
+    };
 
-    const verifyAccount = async () => {
+
+    const loginDetails = async (e) => {
+        e.preventDefault();
         try {
-            let username = document.getElementById('usernametxt').value
-            let password = document.getElementById('passwordtxt').value
-            const response = await api.get("api/v1/accounts");
-            const databaseData = response.data;
-            for(let i = 0; i < databaseData.length; i++) {
-                if(databaseData[i].username === username && databaseData[i].password === password) {
-                    console.log("Correct!");
-                    navigate('/home');
-                    break;
-                } else {
-                    console.log("Incorrect");
-                }
+            const response = await api.post("http://localhost:8080/api/v1/accounts/login", {
+                username: `${usernameTxt}`,
+                password: `${passwordTxt}`
+            });
+            localStorage.setItem('currentRole', JSON.stringify(response.data["role"]));
+            localStorage.setItem('currentUser', JSON.stringify(response.data["username"]));
+            console.log(localStorage.getItem('currentRole'));
+            var role = localStorage.getItem('currentRole')
+            if(role === '"User"') {
+                navigate('/home')
+            } else if (role === '"Admin"') {
+                navigate('/adminDashboard')
+            } else {
+                console.log('no current role found');
             }
-            
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
         }
-    }
+    };
+    
 
     return(
         <div className='login-wrapper'>
             <h1>Login Page</h1>
-            <form>
+            <form onSubmit={loginDetails}>
                 <label>
                     <p>Username</p>
-                    <input type='text' id='usernametxt'/>
+                    <input type='text' value={usernameTxt} onChange={(e) => setUsername(e.target.value)}/>
                 </label>
                 <label>
                     <p>Password</p>
-                    <input type='text' id='passwordtxt'/>
+                    <input type='text' value={passwordTxt} onChange={(e) => setPassword(e.target.value)}/>
                 </label>
 
                 <div>
-                    <button onClick={verifyAccount} type='button'>Submit</button>
+                    <button type='submit'>Submit</button>
                     <button onClick={registerPage}>Register Page</button>
                 </div>
             </form>

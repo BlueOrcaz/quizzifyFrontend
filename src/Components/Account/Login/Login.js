@@ -18,7 +18,7 @@ export default function Login() {
     const loginDetails = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post("http://localhost:8080/api/v1/accounts/login", {
+            const response = await api.post(`/api/v1/accounts/login`, {
                 username: `${usernameTxt}`,
                 password: `${passwordTxt}`
             });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 
 import Login from './Components/Account/Login/Login'
 import Register from './Components/Account/Register/Register'
@@ -21,6 +21,7 @@ function App() {
           <Route element={<PrivateRoutes/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
           </Route>
+          
         </Routes>
       </BrowserRouter>
     </div>

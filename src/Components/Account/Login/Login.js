@@ -24,12 +24,13 @@ export default function Login() {
             });
             localStorage.setItem('currentRole', JSON.stringify(response.data["role"]));
             localStorage.setItem('currentUser', JSON.stringify(response.data["username"]));
+            localStorage.setItem('loggedIn', true);
             console.log(localStorage.getItem('currentRole'));
             var role = localStorage.getItem('currentRole')
             if(role === '"User"') {
                 navigate('/home')
             } else if (role === '"Admin"') {
-                navigate('/adminDashboard')
+                navigate('/admin')
             } else {
                 console.log('no current role found');
             }

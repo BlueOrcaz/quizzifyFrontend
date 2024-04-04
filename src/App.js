@@ -7,16 +7,20 @@ import Register from './Components/Account/Register/Register'
 import Homepage from './Components/Main/Homepage/Homepage';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 
+import PrivateRoutes from './util/PrivateRoutes';
+
 function App() {
   return (
     <div className='wrapper'>
       <h1>Quizzify</h1>
       <BrowserRouter>
         <Routes>
-          <Route path='/login' Component={Login}/>
-          <Route path='/register' Component={Register} />
-          <Route path='/home' Component={Homepage} />
-          <Route path='/adminDashboard' Component={AdminDashboard}/>
+          <Route element={<Login/>} path='/login'/>
+          <Route element={<Register/>} path='/register' />
+          <Route element={<Homepage/>} path='/home' />
+          <Route element={<PrivateRoutes/>}>
+            <Route element={<AdminDashboard/>} path='/admin'/>
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

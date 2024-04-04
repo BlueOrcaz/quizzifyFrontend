@@ -21,7 +21,6 @@ function App() {
           <Route element={<PrivateRoutes/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
           </Route>
-          
         </Routes>
       </BrowserRouter>
     </div>

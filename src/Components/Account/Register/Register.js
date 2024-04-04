@@ -17,7 +17,7 @@ export default function Register() {
             let emailTxt = document.getElementById('emailtxt').value
             let educationalRoleTxt = document.getElementById('educationalroletxt').value
             
-            api.post("http://localhost:8080/api/v1/accounts/createAccount", { 
+            api.post("/api/v1/accounts/createAccount", { 
                 username: `${usernameTxt}`,
                 password: `${passwordTxt}`,
                 email: `${emailTxt}`,

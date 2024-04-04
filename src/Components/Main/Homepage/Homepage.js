@@ -21,7 +21,7 @@ export default function Homepage() {
     const signOut = async (e) => {
         e.preventDefault();
         try {
-            await api.post('http://localhost:8080/api/v1/accounts/logout');
+            await api.post('/api/v1/accounts/logout');
             localStorage.removeItem('currentUser'); 
             localStorage.removeItem('currentRole');
             navigate('/login');

@@ -29,6 +29,10 @@ export default function Homepage() {
             console.error('Error signing out:', error);
         }
     };
+
+    const accountSettings = () => {
+        navigate('/accountsettings');
+    }
     
     return (
         <div>
@@ -43,6 +47,7 @@ export default function Homepage() {
                 <p>No user logged in</p>
             )}
             <button type="button" onClick={signOut}>Sign Out</button>
+            <button type="button" onClick={accountSettings}>Account Settings</button>
         </div>
         
         

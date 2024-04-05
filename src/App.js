@@ -6,6 +6,7 @@ import Login from './Components/Account/Login/Login'
 import Register from './Components/Account/Register/Register'
 import Homepage from './Components/Main/Homepage/Homepage';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
+import AccountSettings from './Components/Account/Settings/AccountSettings';
 
 import PrivateRoutes from './util/PrivateRoutes';
 
@@ -18,6 +19,7 @@ function App() {
           <Route element={<Login/>} path='/login'/>
           <Route element={<Register/>} path='/register' />
           <Route element={<Homepage/>} path='/home' />
+          <Route element={<AccountSettings/>} path='/accountsettings'/>
           <Route element={<PrivateRoutes/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
           </Route>

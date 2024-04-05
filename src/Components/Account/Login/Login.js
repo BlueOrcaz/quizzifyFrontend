@@ -24,8 +24,8 @@ export default function Login() {
             });
             localStorage.setItem('currentRole', JSON.stringify(response.data["role"]));
             localStorage.setItem('currentUser', JSON.stringify(response.data["username"]));
+            localStorage.setItem('currentId', JSON.stringify(response.data["id"]));
             localStorage.setItem('loggedIn', true);
-            console.log(localStorage.getItem('currentRole'));
             var role = localStorage.getItem('currentRole')
             if(role === '"User"') {
                 navigate('/home')

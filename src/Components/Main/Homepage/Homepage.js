@@ -33,6 +33,10 @@ export default function Homepage() {
     const accountSettings = () => {
         navigate('/accountsettings');
     }
+
+    const quizEditor = () => {
+        navigate('/editor');
+    }
     
     return (
         <div>
@@ -48,7 +52,13 @@ export default function Homepage() {
             )}
             <button type="button" onClick={signOut}>Sign Out</button>
             <button type="button" onClick={accountSettings}>Account Settings</button>
+
+            <div>
+                <button type="button" onClick={quizEditor}>Flashcards Editor</button>
+            </div>
         </div>
+        
+        
         
         
     )

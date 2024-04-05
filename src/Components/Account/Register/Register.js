@@ -22,7 +22,7 @@ export default function Register() {
                 password: `${passwordTxt}`,
                 email: `${emailTxt}`,
                 dateOfBirth: `${dateOfBirthTxt}`,
-                educationalRoleTxt: `${educationalRoleTxt}`,
+                educationalRole: `${educationalRoleTxt}`,
                 role: "User",
                 createdFlashcardSetsArrayList: [],
                 createdFoldersArrayList: [] 

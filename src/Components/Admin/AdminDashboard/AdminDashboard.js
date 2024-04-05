@@ -31,6 +31,12 @@ export default function AdminDashboard() {
             console.error('Error signing out:', error);
         }
     };
+
+    
+    const accountSettings = () => {
+        navigate('/accountsettings');
+    }
+    
     
     return (
         <div>
@@ -45,6 +51,7 @@ export default function AdminDashboard() {
                 <p>No user logged in</p>
             )}
             <button type="button" onClick={signOut}>Sign Out</button>
+            <button type="button" onClick={accountSettings}>Account Settings</button>
         </div>
         
         

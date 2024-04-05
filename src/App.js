@@ -7,6 +7,7 @@ import Register from './Components/Account/Register/Register'
 import Homepage from './Components/Main/Homepage/Homepage';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import AccountSettings from './Components/Account/Settings/AccountSettings';
+import Editor from './Components/Main/Editor/Editor';
 
 import PrivateRoutes from './util/PrivateRoutes';
 
@@ -20,6 +21,7 @@ function App() {
           <Route element={<Register/>} path='/register' />
           <Route element={<Homepage/>} path='/home' />
           <Route element={<AccountSettings/>} path='/accountsettings'/>
+          <Route element={<Editor/>} path='/editor'/>
           <Route element={<PrivateRoutes/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
           </Route>

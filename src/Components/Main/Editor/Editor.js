@@ -392,7 +392,7 @@ export default function Editor() {
 
       
       <div>
-        <button type='button' onClick={() => dashboard}>Return to Homepage</button>
+        <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>
     </div>
   )

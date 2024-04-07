@@ -8,8 +8,11 @@ export default function Editor() {
   const [description, setDescription] = useState('');
   const [flashcardSetType, setFlashcardSetType] = useState('');
   const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]); // initial card: front is empty, back is empty
-  const [options] = useState([{ optionId: 1, option: '' }]);
+
+  const [options] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
   const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
+
+
   const navigate = useNavigate();
   let userid = localStorage.getItem('currentId');
   let substringuserid = userid.substring(1, userid.length - 1)
@@ -51,7 +54,7 @@ export default function Editor() {
     const updatedCards = multipleChoiceCards.map(card => {
       if (card.id === cardId) {
         const optionCount = card.allOptions.length + 1;
-        const newOption = { optionId: optionCount, option: ''};
+        const newOption = { optionId: optionCount, option: '', correctAnswer: "" };
         const updatedOptions = [...card.allOptions, newOption];
         return { ...card, allOptions: updatedOptions };
       }
@@ -202,6 +205,7 @@ export default function Editor() {
       })
     })
   }
+
   const changeMCQSide = (id, optionIndex, value) => {
     setMultipleChoiceCards(previousCards => {
       return previousCards.map(card => {
@@ -221,6 +225,24 @@ export default function Editor() {
     });
   }
 
+  const changeMCQAnswer = (id, optionIndex, value) => {
+    setMultipleChoiceCards(previousCards => {
+      return previousCards.map(card => {
+        if (card.id === id) {
+          const updatedOptions = card.allOptions.map((option, index) => {
+            if (index === optionIndex) {
+              return { ...option, correctAnswer: value };
+            } else {
+              return option;
+            }
+          });
+          return { ...card, allOptions: updatedOptions };
+        } else {
+          return card;
+        }
+      });
+    });
+  }
 
   const clearFlashcardValue = (id, side) => {
     return setCards(function (previousCards) {
@@ -237,6 +259,35 @@ export default function Editor() {
       })
     })
   }
+
+  const clearMCQField = (id, optionIndex) => {
+    setMultipleChoiceCards(previousCards => {
+      return previousCards.map(card => {
+        if (card.id === id) {
+          const updatedOptions = card.allOptions.map((option, index) => {
+            if (index === optionIndex) {
+              return { ...option, option: '' };
+            }
+            return option; 
+          });
+          return { ...card, allOptions: updatedOptions }; 
+        }
+        return card;
+      });
+    });
+  };
+
+  const clearMCQQuestion = (id) => {
+    setMultipleChoiceCards(previousCards => {
+      return previousCards.map(card => {
+        if (card.id === id) {
+          return {...card, question: ''};
+        }
+        return card;
+      })
+    })
+  }
+  
 
   return (
     <div>
@@ -302,18 +353,24 @@ export default function Editor() {
                 </div>
                 <p>Question</p>
                 <input type="text" value = {card.question} onChange={(e) => changeMCQuestion(card.id, e.target.value)}/>
-                <button>Clear Question</button>
+                <button type='button' onClick={() => clearMCQQuestion(card.id)}>Clear Question</button>
                 <div>
                   {card.allOptions.map((option, index) => (
                     <div key={index}>
                       <p>Option {index + 1}</p>
+                      
                       <input 
                         type="text" 
-                        value={option.option} // Assuming 'option1' holds the value of the text input
+                        value={option.option}
                         onChange={(e) => changeMCQSide(card.id, index, e.target.value)} // Call changeSide with card ID, option index, and new value
                       />
+                      <select onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)}>
+                        <option value="">Select Answer</option>
+                        <option value="Correct">Correct Option</option>
+                        <option value="Incorrect">Incorrect Option</option>
+                      </select>
                       <button type='button' onClick={() => removeOption(card.id, index)} disabled={card.allOptions.length === 1}>Remove Option</button>
-                      <button>Clear Field</button>
+                      <button type='button' onClick={() => clearMCQField(card.id, index)}>Clear Field</button>
                       <div>
                         <button type='button' onClick={() => addOption(card.id)} disabled={card.allOptions.length === 4}>Add Option</button>
                       </div>

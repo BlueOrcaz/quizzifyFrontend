@@ -124,7 +124,6 @@ export default function Editor() {
 
   };
 
-
   const saveFlashcardSet = (flashcardSetType) => {
     switch(flashcardSetType) {
       case "Front, Back":
@@ -287,6 +286,23 @@ export default function Editor() {
       })
     })
   }
+
+  const createDeck = async () => {
+    try {
+      await api.post("/api/v1/flashcardSets/createFlashcardSet", {
+        authorId: substringuserid,
+        setType: flashcardSetType,
+        isPublic: false,
+        name: flashcardSetName,
+        description: description,
+        flashcards: cards,
+        mcqFlashcards: multipleChoiceCards
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
   
 
   return (
@@ -392,6 +408,7 @@ export default function Editor() {
 
       
       <div>
+        <button type='button' onClick={createDeck}>Create Deck</button>
         <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>
     </div>

@@ -50,7 +50,7 @@ export default function Login() {
                 </label>
                 <label>
                     <p>Password</p>
-                    <input type='text' value={passwordTxt} onChange={(e) => setPassword(e.target.value)}/>
+                    <input type='password' value={passwordTxt} onChange={(e) => setPassword(e.target.value)}/>
                 </label>
 
                 <div>

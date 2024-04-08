@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
-import { saveAs } from 'file-saver'
 
 export default function Editor() {
   const [flashcardSetName, setFlashcardSetName] = useState('');
@@ -9,9 +8,10 @@ export default function Editor() {
   const [flashcardSetType, setFlashcardSetType] = useState('');
   const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]); // initial card: front is empty, back is empty
 
-  const [options] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
+  const [options, setOptions] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
   const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
 
+  const [inputId, setInputId] = useState('');
 
   const navigate = useNavigate();
   let userid = localStorage.getItem('currentId');
@@ -124,46 +124,7 @@ export default function Editor() {
 
   };
 
-  const saveFlashcardSet = (flashcardSetType) => {
-    switch(flashcardSetType) {
-      case "Front, Back":
-        const flashcardSet = {
-          authorId: substringuserid,
-          name: flashcardSetName,
-          description: description,
-          setType: flashcardSetType,
-          isPublic: false,
-          creationDate: "01/01/2024",
-          cards: cards
-        }
-    
-        const JSONSet = JSON.stringify(flashcardSet);
-    
-        const blob = new Blob([JSONSet], { type: 'application/json' });
-        saveAs(blob, 'flashcardSet.json');
-        break;
-      case "Multiple Choice":
-        const MCQSet = {
-          authorId: substringuserid,
-          name: flashcardSetName,
-          description: description,
-          setType: flashcardSetType,
-          isPublic: false,
-          creationDate: "01/01/2024",
-          cards: multipleChoiceCards
-        }
-    
-        const MCQJSONSet = JSON.stringify(MCQSet);
-    
-        const MCQblob = new Blob([MCQJSONSet], { type: 'application/json' });
-        saveAs(MCQblob, 'MCQflashcardSet.json');
-        break;
-      default:
-
-    }
-
-
-  }
+ 
 
   const changeFlashcardSetType = (e) => {
     setFlashcardSetType(e.target.value)
@@ -287,28 +248,191 @@ export default function Editor() {
     })
   }
 
-  const createDeck = async () => {
-    try {
-      await api.post("/api/v1/flashcardSets/createFlashcardSet", {
-        authorId: substringuserid,
-        setType: flashcardSetType,
-        isPublic: false,
-        name: flashcardSetName,
-        description: description,
-        flashcards: cards,
-        mcqFlashcards: multipleChoiceCards
-      });
-    } catch (error) {
-      console.log(error);
+  /* Archived the ability to save flashcardsets as a json
+  const saveFlashcardSet = (flashcardSetType) => {
+    switch(flashcardSetType) {
+      case "Front, Back":
+        const flashcardSet = {
+          authorId: substringuserid,
+          setType: flashcardSetType,
+          isPublic: false,
+          name: flashcardSetName,
+          description: description,
+          creationDate: Date.now(),
+          flashcards: cards.map(card => ({
+            id: card.id,
+            front: card.front,
+            back: card.back
+          }))
+        }
+    
+        const JSONSet = JSON.stringify(flashcardSet);
+    
+        const blob = new Blob([JSONSet], { type: 'application/json' });
+        saveAs(blob, 'flashcardSet.json');
+        break;
+      case "Multiple Choice":
+        const MCQSet = {
+          authorId: substringuserid,
+          setType: flashcardSetType,
+          isPublic: false,
+          name: flashcardSetName,
+          description: description,
+          creationDate: Date.now(),
+          mcqFlashcards: multipleChoiceCards
+        }
+    
+        const MCQJSONSet = JSON.stringify(MCQSet);
+    
+        const MCQblob = new Blob([MCQJSONSet], { type: 'application/json' });
+        saveAs(MCQblob, 'MCQflashcardSet.json');
+        break;
+      default:
+
+    }
+
+    <button type='button' onClick={() => saveFlashcardSet('Multiple Choice')} disabled={flashcardSetType === ""}>Save Flashcard Set</button>
+
+
+  }
+  */
+
+  const createDeck = async (flashcardType) => {
+    switch(flashcardType) {
+      case "Front, Back":
+        try {
+          const response = await api.post("/api/v1/flashcardSets/createFlashcardSet", {
+            authorId: substringuserid,
+            setType: flashcardSetType,
+            isPublic: false,
+            name: flashcardSetName,
+            description: description,
+            creationDate: Date.now(),
+            flashcards: cards.map(card => ({
+              id: card.id,
+              front: card.front,
+              back: card.back
+            }))
+          });
+          localStorage.setItem('createdFlashcardID', JSON.stringify(response.data));
+          console.log("flashcardID: ", response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      break;
+      case "Multiple Choice":
+        try {
+          const response = await api.post("/api/v1/flashcardSets/createFlashcardSet", {
+            authorId: substringuserid,
+            setType: flashcardSetType,
+            isPublic: false,
+            name: flashcardSetName,
+            description: description,
+            creationDate: Date.now(),
+            mcqFlashcards: multipleChoiceCards
+          });
+          localStorage.setItem('createdFlashcardID', JSON.stringify(response.data));
+          console.log("flashcardID: ", response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      break;
+      default:
     }
   }
-  
-  
+
+  const loadFlashcardDetails = async () => {
+    const response = await api.get(`/api/v1/flashcardSets/${inputId}`);
+    let flashcardType = response.data['setType'];
+    switch(flashcardType) {
+      case "Front, Back":
+        try {
+          console.log(response.data);
+    
+          const updatedCards = response.data["flashcards"].map(card => ({
+            id: card["id"],
+            front: card["front"],
+            back: card["back"]
+          }));
+    
+          setCards(updatedCards);
+    
+    
+          setFlashcardSetName(response.data['name']);
+          setDescription(response.data['description']);
+          setFlashcardSetType(response.data['setType']);
+          setMultipleChoiceCards(response.data['mcqFlashcards']);
+        } catch (error) {
+          console.log(error);
+        }
+      break;
+      case "Multiple Choice": 
+      try {
+        console.log(response.data);
+        setFlashcardSetName(response.data['name']);
+        setDescription(response.data['description']);
+        setFlashcardSetType(response.data['setType']);
+        setMultipleChoiceCards(response.data['mcqFlashcards']);
+      } catch (error) {
+        console.log(error);
+      }
+      break;
+      default:
+        break;
+    }
+  }
+
+  const updateFlashcardSet = async (flashcardType) => {
+    switch(flashcardType) {
+      case "Front, Back":
+        try {
+          const response = await api.put(`/api/v1/flashcardSets/update/${inputId}?authorId=${substringuserid}`, {
+            setType: flashcardSetType,
+            isPublic: false,
+            name: flashcardSetName,
+            description: description,
+            flashcards: cards.map(card => ({
+              id: card.id,
+              front: card.front,
+              back: card.back
+            }))
+          });
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      case "Multiple Choice":
+        try {
+          const response = await api.put(`/api/v1/flashcardSets/update/${inputId}?authorId=${substringuserid}`, {
+            setType: flashcardSetType,
+            isPublic: false,
+            name: flashcardSetName,
+            description: description,
+            mcqFlashcards: multipleChoiceCards
+          })
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      default:
+        break;
+    }
+   
+  }
+
 
   return (
     <div>
       <h2>Flashcard Set Editor</h2>
       <form>
+
+        <div>
+          <label>Load in Existing Flashcard Deck</label>
+          <input type="text" value={inputId} onChange={(e) => setInputId(e.target.value)}></input>
+          <button type="button" onClick={loadFlashcardDetails}>Load in Details</button>
+        </div>
 
         <div>
           <label>Flashcard Set Name:</label>
@@ -353,7 +477,6 @@ export default function Editor() {
             ))}
             <div>
               <button type='button' onClick={() => addFlashcard('Front, Back')}>Add Card</button>
-              <button type='button' onClick={() => saveFlashcardSet('Front, Back')} disabled={flashcardSetType === ""}>Save Flashcard Set</button>
             </div>
           </div>
 
@@ -380,10 +503,10 @@ export default function Editor() {
                         value={option.option}
                         onChange={(e) => changeMCQSide(card.id, index, e.target.value)} // Call changeSide with card ID, option index, and new value
                       />
-                      <select onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)}>
+                      <select value={option.correctAnswer} onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)}>
                         <option value="">Select Answer</option>
-                        <option value="Correct">Correct Option</option>
-                        <option value="Incorrect">Incorrect Option</option>
+                        <option value="true">Correct Option</option>
+                        <option value="false">Incorrect Option</option>
                       </select>
                       <button type='button' onClick={() => removeOption(card.id, index)} disabled={card.allOptions.length === 1}>Remove Option</button>
                       <button type='button' onClick={() => clearMCQField(card.id, index)}>Clear Field</button>
@@ -399,7 +522,7 @@ export default function Editor() {
             <br></br>
             <div>
               <button type='button' onClick={() => addFlashcard('Multiple Choice')}>Add MCQ</button>
-              <button type='button' onClick={() => saveFlashcardSet('Multiple Choice')} disabled={flashcardSetType === ""}>Save Flashcard Set</button>
+              
             </div>
           </div>
 
@@ -408,7 +531,9 @@ export default function Editor() {
 
       
       <div>
-        <button type='button' onClick={createDeck}>Create Deck</button>
+        <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={flashcardSetType===""}>Create Deck</button>
+        <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled = {flashcardSetType===""}>Update Flashcard Set</button>
+        <br></br>
         <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>
     </div>

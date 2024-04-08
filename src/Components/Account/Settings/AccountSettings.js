@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Homepage from '../../Main/Homepage/Homepage';
 import api from '../../../api/axiosConfig';
 
 export default function AccountSettings() {
@@ -12,18 +11,20 @@ export default function AccountSettings() {
     const[educationalRole, setEducationalRole] = useState('');
     
     const navigate = useNavigate();
+
     const returnHomepage = () => {
-        navigate("/home");
+        navigate("/home"); // routes
     }
-    let userid = localStorage.getItem('currentId');
-    let substringuserid = userid.substring(1, userid.length - 1)
+
+    let userid = localStorage.getItem('currentId'); // retrieve current logged in account id to call to backend
+    let substringuserid = userid.substring(1, userid.length - 1) // retrieve current userid without the double quotation marks
     const loadDetails = async () => {
         try {      
-            const response = await api.get(`/api/v1/accounts/${substringuserid}`);
-            console.log(response.data);
+            const response = await api.get(`/api/v1/accounts/${substringuserid}`); // get request to the end user
+            // console.log(response.data); debug
             setUsername(response.data['username']);
             setDateOfBirth(response.data['dateOfBirth']);
-            setEmail(response.data['dateOfBirth']);
+            setEmail(response.data['email']);
             setEducationalRole(response.data['educationalRole']);
         } catch (error) {
             console.log(error);
@@ -36,29 +37,34 @@ export default function AccountSettings() {
     const updateDetails = async (e) => {
         e.preventDefault();
         try {
-            await api.put(`/api/v1/accounts/update/${substringuserid}?currentPassword=${currentPassword}`, {
+            await api.put(`/api/v1/accounts/update/${substringuserid}`, {
                 username: username,
                 email: email,
-                password: newPassword,
                 dateOfBirth: dateOfBirth,
-                educationalRole: educationalRole
+                educationalRole: educationalRole,
+                password: newPassword // Always include newPassword, it may be empty
+            }, {
+                params: {
+                    currentPassword: currentPassword // need to pass the current password to verify their changes
+                }
             })
             .then(response => {
-                console.log("Account updated succesfully", response.data);
+                console.log("Account updated successfully", response.data);
             })
             .catch(error => {
                 console.error(error);
-            })
+            });
         } catch (e) {
             console.log(e);
         }
     }
+    
 
 
 
-    useEffect(() => {
+    useEffect(() => { // synchronize with backend
         loadDetails();
-    }, []);
+    });
     
 
     return (
@@ -68,31 +74,31 @@ export default function AccountSettings() {
             <form onSubmit={updateDetails}>
                 <label>
                     <p>Username</p>
-                    <input defaultValue={username} type='text' id='usernametxt'/>
+                    <input defaultValue={username} type='text' disabled={true}/> {/* Username text disabled - Users cannot change username */}
                 </label>
                 <label>
                     <p>Current Password</p>
-                    <input type='text' onChange={(e) => setCurrentPassword(e.target.value)} id='currentpasswordtxt'/>
+                    <input type='text' onChange={(e) => setCurrentPassword(e.target.value)} /> {/* Sets the current password based off of user input, stores in password const*/}
                 </label>
                 <label>
                     <p>New Password</p>
-                    <input type='text' onChange={(e) => setNewPassword(e.target.value)} id='newpasswordtxt'/>
+                    <input type='text' onChange={(e) => setNewPassword(e.target.value)} />
                 </label>
                 <label>
                     <p>DateOfBirth</p>
-                    <input defaultValue={dateOfBirth} type='text' id='dateOfBirthtxt'/>
+                    <input defaultValue={dateOfBirth} type='text' onChange={(e) => setDateOfBirth(e.target.value)}/>
                 </label>
                 <label>
                     <p>Email</p>
-                    <input defaultValue={email} type='text' id='emailtxt'/>
+                    <input defaultValue={email} type='text' onChange={(e) => setEmail(e.target.value)}/>
                 </label>
                 <label>
                     <p>Educational Role</p>
-                    <input defaultValue={educationalRole} type='text' id='educationalroletxt'/>
+                    <input defaultValue={educationalRole} type='text' onChange={(e) => setEducationalRole(e.target.value)}/>
                 </label>
                 <div>
-                    <button type='submit'>Update Details</button>
-                    <button type='button' onClick={returnHomepage}>Login Page</button>
+                    <button type='submit'>Update Details</button> {/* On submit it updates the users details based off of the data as well as their password for verification */}
+                    <button type='button' onClick={returnHomepage}>Login Page</button> {/* Return to login page */}
                 </div>
             </form>
             </div>

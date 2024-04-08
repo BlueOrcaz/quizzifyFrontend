@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Login from './Components/Account/Login/Login'
 import Register from './Components/Account/Register/Register'
@@ -9,7 +9,8 @@ import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import AccountSettings from './Components/Account/Settings/AccountSettings';
 import Editor from './Components/Main/Editor/Editor';
 
-import PrivateRoutes from './util/PrivateRoutes';
+import AdminRoute from './util/AdminRoute';
+import UserRoute from './util/UserRoute';
 
 function App() {
   return (
@@ -17,12 +18,19 @@ function App() {
       <h1>Quizzify</h1>
       <BrowserRouter>
         <Routes>
+          {/*Accessible to everyone */}
           <Route element={<Login/>} path='/login'/>
           <Route element={<Register/>} path='/register' />
-          <Route element={<Homepage/>} path='/home' />
-          <Route element={<AccountSettings/>} path='/accountsettings'/>
-          <Route element={<Editor/>} path='/editor'/>
-          <Route element={<PrivateRoutes/>}>
+
+          {/*Only accessible to those in the "user role" */}
+          <Route element={<UserRoute/>}>
+            <Route element={<Homepage/>} path='/home' />
+            <Route element={<AccountSettings/>} path='/accountsettings'/>
+            <Route element={<Editor/>} path='/editor'/>
+          </Route>
+
+          {/*Only accessible to those in the "admin role" */}
+          <Route element={<AdminRoute/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
           </Route>
         </Routes>

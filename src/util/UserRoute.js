@@ -1,11 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
-const PrivateRoutes = ({children}) => {
+const PrivateRoutes = () => {
     let role = localStorage.getItem('currentRole');
-
-
     return (
-        role === '"Admin"' ? <Outlet/> : <Navigate to="/login"/>
+        role === '"User"' ? <Outlet/> : <Navigate to="/login"/> 
     )
 }
 

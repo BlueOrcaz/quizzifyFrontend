@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../../../api/axiosConfig';
 
 export default function Homepage() {
-    const[currentUser, setCurrentUser] = useState(null);
-    const[currentAccountType, setCurrentAccountType] = useState(null);
-    const navigate = useNavigate();
+    const[currentUser, setCurrentUser] = useState(''); // const arrays
+    const[currentAccountType, setCurrentAccountType] = useState('');
 
-    useEffect(() => {
-        const userJson = localStorage.getItem('currentUser');
-        const user = userJson ? JSON.parse(userJson) : null;
-        setCurrentUser(user);
+    const navigate = useNavigate(); // react routes
 
-        const accountTypeJson = localStorage.getItem('currentRole');
-        const type = accountTypeJson ? JSON.parse(accountTypeJson) : null;
-        setCurrentAccountType(type);
+    useEffect(() => { // retrieve data from localstorage and update current user and currentrole
+        const userJson = JSON.parse(localStorage.getItem('currentUser'));
+        setCurrentUser(userJson);
+        const accountTypeJson = JSON.parse(localStorage.getItem('currentRole'));
+        setCurrentAccountType(accountTypeJson);
     }, []);
 
 
     const signOut = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // prevent default error from occurring
         try {
-            await api.post('/api/v1/accounts/logout');
+            await api.post('/api/v1/accounts/logout'); // post request to let the backend know you are logged out.
             localStorage.removeItem('currentUser'); 
             localStorage.removeItem('currentRole');
             navigate('/login');
@@ -42,6 +40,7 @@ export default function Homepage() {
         <div>
             <h1>Quizzify - Home</h1>
             <h2>Current Logged In Account:</h2>
+            {/* checks if there is a current user; if not, then no user is logged in. If there is then you assign currentuser and current account type to the two paras*/}
             {currentUser ? (
                 <div>
                     <p>Username: {currentUser}</p>
@@ -50,6 +49,7 @@ export default function Homepage() {
             ) : (
                 <p>No user logged in</p>
             )}
+            {/* Call out consts on click */}
             <button type="button" onClick={signOut}>Sign Out</button>
             <button type="button" onClick={accountSettings}>Account Settings</button>
 

@@ -10,6 +10,8 @@ import AccountSettings from './Components/Account/Settings/AccountSettings';
 import Editor from './Components/Main/Editor/Editor';
 import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
 
+import ErrorPage from './Components/404/ErrorPage';
+
 import AdminRoute from './util/AdminRoute';
 import UserRoute from './util/UserRoute';
 
@@ -22,6 +24,10 @@ function App() {
           {/*Accessible to everyone */}
           <Route element={<Login/>} path='/login'/>
           <Route element={<Register/>} path='/register' />
+          <Route element={<Login/>} path='/'/>
+
+          {/* If user goes on any other route which isn't this then it will return a 404 error */}
+          <Route element={<ErrorPage/>} path='*'/>
 
           {/*Only accessible to those in the "user role" */}
           <Route element={<UserRoute/>}>
@@ -35,6 +41,8 @@ function App() {
           <Route element={<AdminRoute/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
           </Route>
+
+          
         </Routes>
       </BrowserRouter>
     </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import api from '../../../api/axiosConfig';
 
+import '../Login/Login.css'
+
 export default function Login() {
     const [usernameTxt, setUsername] = useState('');  // stores the username input
     const [passwordTxt, setPassword] = useState(''); // store password input
@@ -39,7 +41,7 @@ export default function Login() {
 
     return(
         <div className='login-wrapper'>
-            <h1>Login Page</h1>
+            <h1>Login</h1>
             <form onSubmit={loginDetails}> {/* Calls the api */}
                 <label>
                     <p>Username</p>

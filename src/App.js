@@ -8,6 +8,7 @@ import Homepage from './Components/Main/Homepage/Homepage';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import AccountSettings from './Components/Account/Settings/AccountSettings';
 import Editor from './Components/Main/Editor/Editor';
+import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
 
 import AdminRoute from './util/AdminRoute';
 import UserRoute from './util/UserRoute';
@@ -27,6 +28,7 @@ function App() {
             <Route element={<Homepage/>} path='/home' />
             <Route element={<AccountSettings/>} path='/accountsettings'/>
             <Route element={<Editor/>} path='/editor'/>
+            <Route element={<FlashcardSetPage/>} path='/flashcardSet/:id'/>
           </Route>
 
           {/*Only accessible to those in the "admin role" */}

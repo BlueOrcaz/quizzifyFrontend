@@ -12,62 +12,59 @@ export default function FlashcardSetPage() {
     const [date, setDate] = useState('');
     const [type, setType] = useState('');
 
+   
     const [currentId, setCurrentId] = useState(0);
+    
+    // front, back - checks whether or not the card is flipped
     const [isFlipped, setIsFlipped] = useState(false);
 
+    // structure for front/back and mcq flashcards.
     const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]);
     const [options] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
     const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
 
+    
     const [correct, setCorrect] = useState('');
+    const [selectedValues, setSelectedValues] = useState([]); // arr used to collect all selected answers to compare
+
+    const { id } = useParams(); // use parameters based off of the route link id
+
+    const navigate = useNavigate();
+
+    const dashboard = () => {
+        navigate('/home'); // return back to the dashboard
+    }
 
 
     const showNextCard = (flashcardType) => {
         if (flashcardType === "Front, Back") {
-            setCurrentId(currentId < cards.length - 1 ? currentId + 1 : currentId);
-            setIsFlipped(false);
+            setCurrentId(currentId < cards.length - 1 ? currentId + 1 : currentId); // if the current id is less then the card length, then increment it by 1. If not, then it stays the same
         } else if (flashcardType === "Multiple Choice") {
-            setCurrentId(currentId < multipleChoiceCards.length - 1 ? currentId + 1 : currentId);
-            setIsFlipped(false);
+            setCurrentId(currentId < multipleChoiceCards.length - 1 ? currentId + 1 : currentId); // same thing but for mcq cards
         }
     };
 
-
     const showPrevCard = () => {
-        setCurrentId(currentId > 0 ? currentId - 1 : currentId);
-        setIsFlipped(false);
-        setCorrect('');
+        setCurrentId(currentId > 0 ? currentId - 1 : currentId); // checks if the current id is greater then 0. If it is, then that means its not on last index and can decrement
+        setIsFlipped(false); 
+        setCorrect(''); // remove correct
     };
 
     const flipCard = () => {
-        setIsFlipped(!isFlipped);
-        setCorrect('');
+        setIsFlipped(!isFlipped); 
     };
 
-    const [selectedValues, setSelectedValues] = useState([]);
-
-    useEffect(() => {
-        console.log(correct);
-    }, [correct]);
-
-    // Function to handle checkbox change
-    const handleCheckboxChange = (event) => {
-      const { value, checked } = event.target;
-  
-      // If checkbox is checked, add its value to the array
-      // If checkbox is unchecked, remove its value from the array
-      if (checked) {
+    const handleCheckboxChange = (e) => {
+      const { value, checked } = e.target;
+      if (checked) { // if checkbox is checked, add its value to the array
         setSelectedValues([...selectedValues, value]);
-      } else {
+      } else { // if not then remove value from array
         setSelectedValues(selectedValues.filter((val) => val !== value));
       }
     };
 
     const checkValues = () => {
-        console.log(selectedValues);
-        // Assume initially correct
         let isCorrect = true;
-    
         // loop through selectedValues array
         // if there is any "false" value, set isCorrect to false
         for(let i = 0; i < selectedValues.length; i++) {
@@ -76,21 +73,11 @@ export default function FlashcardSetPage() {
                 break; // No need to continue checking once we found a 'false' value
             }
         }
-    
         // Update the correct state based on the final result
-        setCorrect(isCorrect ? 'Correct' : 'Incorrect');
-    
-        console.log(correct);
+        setCorrect(isCorrect ? 'Correct' : 'Incorrect'); // if it is correct, then setcorrect to "correct". if not then set to incorrect
     }
     
-    
-
-    
-
-    const { id } = useParams(); // use parameters based off of the route link id
-
-
-    useEffect(() => {
+    useEffect(() => { // so it prevents multiple api get requests
         const fetchFlashcardDetails = async () => {
             try {
                 const response = await api.get(`/api/v1/flashcardSets/${id}`); // load in details about the flashcard using get request 
@@ -104,35 +91,32 @@ export default function FlashcardSetPage() {
                     front: card['front'],
                     back: card['back']
                 }))
-                setCards(updatedCards);
+                setCards(updatedCards); 
             } catch (error) {
                 console.log(error);
             }
         };
 
         fetchFlashcardDetails();
+    });
 
-    }, []);
-    const milliseconds = date; // Example timestamp in milliseconds
-    const seconds = milliseconds / 1000; // Convert milliseconds to seconds
-    const myDate = new Date(seconds * 1000); // Create Date object from seconds
+    const seconds = date / 1000; 
+    const myDate = new Date(seconds * 1000);  // epoch time - dunno why it doesnt work properly if not divided by 1000 then multiplied by 1000
 
-    const navigate = useNavigate();
-
-    const dashboard = () => {
-        navigate('/home'); // return back to the dashboard
-    }
-
+  
     return (
         <div>
+            {/* Flashcard Set Details which is taken from the consts and they are taken from api get req */}
             <h3>Flashcard Name: {name}</h3>
             <h4>Description:</h4>
             <p>{description}</p>
             <h4>Creation Date: {myDate.toDateString()}</h4>
             <h4>Set Type: {type}</h4>
             <div>
+                {/* return to homepage button */}
                 <button type='button' onClick={dashboard} >Return to Homepage</button>
             </div>
+            {/* if the deck type is front, back then itll display differing buttons and ability to flip cards */}
             {type === 'Front, Back' && (
                 <div>
                     <div className={`flashcard ${isFlipped ? 'flipped' : ''}`} onClick={flipCard}>
@@ -148,13 +132,14 @@ export default function FlashcardSetPage() {
                         </div>
                     </div>
                     <div className='buttons'>
+                        {/* previous and next buttons, as well as "flip" button. Plays animation in css */}
                         <button type="button" onClick={showPrevCard}>Previous</button>
                         <button type="button" onClick={flipCard}>Flip</button>
                         <button type="button" onClick={() => showNextCard("Front, Back")}>Next</button>
                     </div>
                 </div>
             )}
-
+            {/* if the deck type is mcq then itll display option buttons and prevent user from flipping cards */}
             {type === 'Multiple Choice' && (
                 <div>
                     <div className='flashcard' >
@@ -164,14 +149,9 @@ export default function FlashcardSetPage() {
                         <div className='Options'>
                             {multipleChoiceCards[currentId].allOptions.map(option => (
                                 <div>
-                                    <input
-                                        type="checkbox"
-                                        id={`option${option.optionId}`}
-                                        name={`option${option.optionId}`}
-                                        value={option.correctAnswer}
-                                        onChange={handleCheckboxChange}
-                                    />
-
+                                    {/* checkbox which returns the boolean value of the option: if it is correct, it returns true, if not itll return false */}
+                                    <input type="checkbox" id={`option${option.optionId}`} name={`option${option.optionId}`} value={option.correctAnswer} onChange={handleCheckboxChange}/>
+                                    {/* Label for each checkbox */}
                                     <label htmlFor={`option${option.optionId}`}>
                                         Option {option.optionId}:  {option.option}
                                     </label>
@@ -179,13 +159,13 @@ export default function FlashcardSetPage() {
                             ))}
 
                         </div>
+                        {/* Once submitted it calls to check values and if it is all correct, returns "correct", vice versa */}
                         <button type='button' onClick={checkValues}>Submit</button>
                         <p>{correct}</p>
                     </div>
 
-
-                    
                     <div className='buttons'>
+                        {/* previous and next buttons */}
                         <button type="button" onClick={showPrevCard}>Previous</button>
                         <button type="button" onClick={() => showNextCard("Multiple Choice")}>Next</button>
                     </div>

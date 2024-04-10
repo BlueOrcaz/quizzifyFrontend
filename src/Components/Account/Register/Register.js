@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../../api/axiosConfig';
 
+import '../Register/Register.css'
+
 
 export default function Register() {
     const [username, setUsername] = useState('');
@@ -43,7 +45,7 @@ export default function Register() {
 
     return (
         <div className='register-wrapper'>
-            <h1>Sign Up Page</h1>
+            <h1>Sign Up</h1>
             <form onSubmit={createAccount}> {/* Calls the api */}
                 <label>
                     <p>Username</p>
@@ -54,7 +56,7 @@ export default function Register() {
                     <input type='text' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </label>
                 <label>
-                    <p>DateOfBirth</p>
+                    <p>Date Of Birth</p>
                     <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/>
                 </label>
                 <label>

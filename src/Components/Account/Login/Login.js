@@ -40,7 +40,9 @@ export default function Login() {
     
 
     return(
-        <div className='login-wrapper'>
+        
+        <div className='login-wrapper' >
+            
             <h1>Login</h1>
             <form onSubmit={loginDetails}> {/* Calls the api */}
                 <label>
@@ -54,7 +56,7 @@ export default function Login() {
 
                 <div>
                     <button type='submit'>Submit</button>
-                    <button onClick={registerPage}>Register Page</button> {/* Navigate */}
+                    <button onClick={registerPage}>Register</button> {/* Navigate */}
                 </div>
             </form>
         </div>

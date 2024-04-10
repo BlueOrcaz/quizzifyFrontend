@@ -18,7 +18,6 @@ import UserRoute from './util/UserRoute';
 function App() {
   return (
     <div className='wrapper'>
-      <h1>Quizzify</h1>
       <BrowserRouter>
         <Routes>
           {/*Accessible to everyone */}

@@ -1,68 +1,40 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
-    
-}
-
-
 body {
-    color: var(--text);
-    background-color: var(--background);
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    height: 85vh; 
+    height: 90vh; 
 }
-
-h1 {
-    color: var(--primary);
-}
-
-label {
-    color: var(--text);
-}
-
-button {
-    border-radius: 5px;
-    background-color: var(--primary); 
-    border: none;
-    color: white;
-    text-align: center;
-    padding: 10px 0; 
-    display: block;
-    font-size: 14px; /* Increase font size for better readability */
-    width: 100%; /* Make button full width */
-    margin-bottom: 10px; /* Add margin bottom for better separation */
-    transition: background-color 0.3s, transform 0.3s; /* Add transition for background-color and transform */
-}
-
-button:hover {
-    background-color: var(--secondary); /* Change background color on hover */
-    transform: scale(1.05); /* Scale up the button slightly on hover */
-}
-
-label {
-    padding: 10px;
-}
-
-input {
-    border-radius: 5px;
-    width: 100%;
-    padding: 10px; /* Add padding for better touch interaction */
-    margin-bottom: 10px; /* Add margin bottom for better separation */
-}
-
 .login-wrapper {
     background-color: var(--background);
-    border-radius: 5px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center; 
-    border: 2px solid var(--accent);
-    width: 300px; 
+    border: 5px solid var(--accent);
+    width: 350px; 
     padding: 20px; 
     box-sizing: border-box;
 }
+
+.login {
+    
+    font-size: 40px;
+}
+
+.login-form {
+    width: 95%;
+    padding: 5px;
+    margin: auto;
+}
+
+.signin-text {
+    color: red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    text-align: center;
+}
+
+.buttons {
+    padding: 0px 15px 0px;
+}
+

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../../api/axiosConfig';
 
+import '../Settings/AccountSettings.css'
+
 export default function AccountSettings() {
     const[username, setUsername] = useState('');
     const[currentPassword, setCurrentPassword] = useState('');
@@ -9,19 +11,26 @@ export default function AccountSettings() {
     const[dateOfBirth, setDateOfBirth] = useState('');
     const[email, setEmail] = useState('');
     const[educationalRole, setEducationalRole] = useState('');
+
+    const[status, setStatus] = useState('');
     
     const navigate = useNavigate();
 
     const returnHomepage = () => {
-        navigate("/home"); // routes
+        if(localStorage.getItem('currentRole') === '"Admin"') {
+            navigate("/admin");
+        } else {
+            navigate("/home"); // routes
+        }
     }
+
+
 
     let userid = localStorage.getItem('currentId'); // retrieve current logged in account id to call to backend
     let substringuserid = userid.substring(1, userid.length - 1) // retrieve current userid without the double quotation marks
     const loadDetails = async () => {
         try {      
             const response = await api.get(`/api/v1/accounts/${substringuserid}`); // get request to the end user
-            // console.log(response.data); debug
             setUsername(response.data['username']);
             setDateOfBirth(response.data['dateOfBirth']);
             setEmail(response.data['email']);
@@ -49,9 +58,11 @@ export default function AccountSettings() {
                 }
             })
             .then(response => {
-                console.log("Account updated successfully", response.data);
+                //console.log("Account updated successfully", response.data);
+                setStatus('Account Updated Successfully!');
             })
             .catch(error => {
+                setStatus('Please double-check your password!');
                 console.error(error);
             });
         } catch (e) {
@@ -64,7 +75,8 @@ export default function AccountSettings() {
 
     useEffect(() => { // synchronize with backend
         loadDetails();
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     
 
     return (
@@ -73,33 +85,27 @@ export default function AccountSettings() {
             <div>
             <form onSubmit={updateDetails}>
                 <label>
-                    <p>Username</p>
                     <input defaultValue={username} type='text' disabled={true}/> {/* Username text disabled - Users cannot change username */}
                 </label>
                 <label>
-                    <p>Current Password</p>
-                    <input type='text' onChange={(e) => setCurrentPassword(e.target.value)} /> {/* Sets the current password based off of user input, stores in password const*/}
+                    <input type='text' onChange={(e) => setCurrentPassword(e.target.value)} placeholder='Current Password'/> {/* Sets the current password based off of user input, stores in password const*/}
                 </label>
                 <label>
-                    <p>New Password</p>
-                    <input type='text' onChange={(e) => setNewPassword(e.target.value)} />
+                    <input type='text' onChange={(e) => setNewPassword(e.target.value)} placeholder='New Password'/>
                 </label>
                 <label>
-                    <p>DateOfBirth</p>
-                    <input defaultValue={dateOfBirth} type='text' onChange={(e) => setDateOfBirth(e.target.value)}/>
+                    <input defaultValue={dateOfBirth} type='text' onChange={(e) => setDateOfBirth(e.target.value)} placeholder='Date Of Birth'/>
                 </label>
                 <label>
-                    <p>Email</p>
-                    <input defaultValue={email} type='text' onChange={(e) => setEmail(e.target.value)}/>
+                    <input defaultValue={email} type='text' onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
                 </label>
                 <label>
-                    <p>Educational Role</p>
-                    <input defaultValue={educationalRole} type='text' onChange={(e) => setEducationalRole(e.target.value)}/>
+                    <input defaultValue={educationalRole} type='text' onChange={(e) => setEducationalRole(e.target.value)} placeholder='Educational Role'/>
                 </label>
-                <div>
-                    <button type='submit'>Update Details</button> {/* On submit it updates the users details based off of the data as well as their password for verification */}
-                    <button type='button' onClick={returnHomepage}>Login Page</button> {/* Return to login page */}
-                </div>
+                <p className='settings-status-msg'>{status}</p>
+                <br></br>
+                <button type='submit'>Update Details</button> {/* On submit it updates the users details based off of the data as well as their password for verification */}
+                <button type='button' onClick={returnHomepage}>Dashboard</button> {/* Return to login page */}
             </form>
             </div>
         </div>

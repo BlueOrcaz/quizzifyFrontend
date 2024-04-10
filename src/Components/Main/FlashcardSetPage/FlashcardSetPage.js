@@ -105,9 +105,9 @@ export default function FlashcardSetPage() {
 
   
     return (
-        <div>
+        <div className='editor-wrapper'>
             {/* Flashcard Set Details which is taken from the consts and they are taken from api get req */}
-            <h3>Flashcard Name: {name}</h3>
+            <h3 >Flashcard Name: {name}</h3>
             <h4>Description:</h4>
             <p>{description}</p>
             <h4>Creation Date: {myDate.toDateString()}</h4>
@@ -118,7 +118,7 @@ export default function FlashcardSetPage() {
             </div>
             {/* if the deck type is front, back then itll display differing buttons and ability to flip cards */}
             {type === 'Front, Back' && (
-                <div>
+                <div className='front-back-wrapper'>
                     <div className={`flashcard ${isFlipped ? 'flipped' : ''}`} onClick={flipCard}>
                         <div className="front">
                             <p>Front: </p>
@@ -141,7 +141,7 @@ export default function FlashcardSetPage() {
             )}
             {/* if the deck type is mcq then itll display option buttons and prevent user from flipping cards */}
             {type === 'Multiple Choice' && (
-                <div>
+                <div className='editor-wrapper'>
                     <div className='flashcard' >
                         <div className='Question'>
                             Question {multipleChoiceCards[currentId].id}

@@ -6,4 +6,63 @@
     --accent: #7bb7c1;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
 
+body {
+    color: var(--text);
+    background-color: var(--background);
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+h1 {
+    color: var(--primary);
+}
+
+label {
+    color: var(--text);
+}
+
+button {
+    border-radius: 15px;
+    background-color: var(--secondary); 
+    border: none;
+    color: white;
+    text-align: center;
+    padding: 10px 0; 
+    display: block;
+    font-size: 14px; /* Increase font size for better readability */
+    width: 100%; /* Make button full width */
+    margin-bottom: 10px; /* Add margin bottom for better separation */
+    transition: background-color 0.3s, transform 0.3s; /* Add transition for background-color and transform */
+}
+
+button:hover {
+    background-color: var(--accent); /* Change background color on hover */
+    transform: scale(1.05); /* Scale up the button slightly on hover */
+}
+
+label {
+    padding: 10px;
+    align-items: center;
+    justify-content: center; 
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    align-items: center;
+    justify-content: center; 
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    width: 100%;
+    padding: 15px; /* Add padding for better touch interaction */
+    margin-bottom: 10px; /* Add margin bottom for better separation */
+}

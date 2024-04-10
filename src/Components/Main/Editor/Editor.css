@@ -1,0 +1,78 @@
+.flashcard-editor {
+    max-height: 80vh;
+}
+
+.editor-h2 {
+    text-align: center;
+}
+
+.default-set {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flashcardset-text-area {
+    width: 600px;
+    height: 100px;
+    resize: none;
+    border-radius: 5px;
+}
+
+.select-editor {
+    height: 40px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.front-back-flashcard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+.card-container {
+    width: 80%;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 30px;
+    border: 5px solid var(--accent);
+}
+
+
+.card-label {
+    font-size: 20px;
+}
+
+.add-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Added to vertically center the button */
+    width: 80%;
+    padding: 20px;
+    margin: auto; /* Center the button horizontally */
+    display: block; /* Ensure the button takes full width */
+}
+
+.red-button button:hover {
+    background-color: red; /* Change background color on hover */
+    transform: scale(1.05); /* Scale up the button slightly on hover */
+}
+
+.editor-buttons {
+    text-align: center;
+    margin: auto;
+    padding: 15px 0; 
+    display: block;
+    font-size: 14px; /* Increase font size for better readability */
+    width: 50%; /* Make button full width */
+}
+
+.add-button {
+    width: 100px; /* Adjust the width as needed */
+    height: 100px; /* Set height equal to width */
+}

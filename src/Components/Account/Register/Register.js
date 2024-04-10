@@ -19,7 +19,7 @@ export default function Register() {
 
     const createAccount = async () => {
         try { 
-            api.post("/api/v1/accounts/createAccount", {  // sennd post request to register new account in the backend 
+            api.post("/api/v1/accounts/createAccount", {  // send post request to register new account in the backend 
                 username: `${username}`,
                 password: `${password}`,
                 email: `${email}`,
@@ -34,6 +34,7 @@ export default function Register() {
                 navigate("/login");
             })
             .catch(function (error) {
+                
                 console.log("Error:" + error);
             });
 
@@ -46,26 +47,21 @@ export default function Register() {
     return (
         <div className='register-wrapper'>
             <h1>Sign Up</h1>
-            <form onSubmit={createAccount}> {/* Calls the api */}
+            <form onSubmit={createAccount} className='register-form'> {/* Calls the api */}
                 <label>
-                    <p>Username</p>
-                    <input type='text' value={username} onChange={(e) => setUsername(e.target.value)}/> {/* Reads the inputted text and assign it the const */}
+                    <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" /> {/* Reads the inputted text and assign it the const */}
                 </label>
                 <label>
-                    <p>Password</p>
-                    <input type='text' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <input type='text' value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
                 </label>
                 <label>
-                    <p>Date Of Birth</p>
-                    <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/>
+                    <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} placeholder="Date of Birth"/>
                 </label>
                 <label>
-                    <p>Email</p>
-                    <input type='text' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
                 </label>
                 <label>
-                    <p>Educational Role</p>
-                    <input type='text' value={educationalRole} onChange={(e) => setEducationalRole(e.target.value)}/>
+                    <input type='text' value={educationalRole} onChange={(e) => setEducationalRole(e.target.value)} placeholder="Educational Role"/>
                 </label>
                 <div>
                     <button type='submit' onClick={login}>Submit</button>

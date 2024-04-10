@@ -11,8 +11,23 @@
     transform-style: preserve-3d;
 }
 
+
+
 .flashcard.flipped {
     transform: rotateY(180deg);
+}
+
+.editor-wrapper {
+    background-color: var(--background);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    border: 5px solid var(--accent);
+    width: 350px; 
+    padding: 20px; 
+    box-sizing: border-box;
 }
 
 .front, .back {
@@ -24,10 +39,6 @@
 
 .back {
     transform: rotateY(180deg);
-}
-
-button {
-    margin: 5px;
 }
 
 .buttons {

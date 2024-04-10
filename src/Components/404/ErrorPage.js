@@ -4,8 +4,6 @@ export default function ErrorPage() {
         <div>
             <h1>Quizzify</h1>
             <h2>404 Not Found</h2>
-        </div>
-       
-        
+        </div> 
     )
 }

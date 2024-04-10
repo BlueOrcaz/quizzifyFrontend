@@ -7,6 +7,7 @@ import '../Login/Login.css'
 export default function Login() {
     const [usernameTxt, setUsername] = useState('');  // stores the username input
     const [passwordTxt, setPassword] = useState(''); // store password input
+    const [signedIn, setSignedIn] = useState('');
 
     const navigate = useNavigate();
 
@@ -34,31 +35,31 @@ export default function Login() {
                 console.log('no current role found');
             }
         } catch (error) {
+            setSignedIn("Incorrect Username or Password!");
             console.log(error);
         }
     };
     
 
     return(
-        
+        <div>
+        <h1>Quizzify</h1>
         <div className='login-wrapper' >
-            
-            <h1>Login</h1>
-            <form onSubmit={loginDetails}> {/* Calls the api */}
+            <h1 className='login'>Login</h1>
+            <form onSubmit={loginDetails} className='login-form'> {/* Calls the api */}
                 <label>
-                    <p>Username</p>
-                    <input type='text' value={usernameTxt} onChange={(e) => setUsername(e.target.value)}/>  {/* Reads the inputted text and assign it to username const */}
+                    <input type='text' value={usernameTxt} onChange={(e) => setUsername(e.target.value)} placeholder='Username'/>  {/* Reads the inputted text and assign it to username const */}
                 </label>
                 <label>
-                    <p>Password</p>
-                    <input type='password' value={passwordTxt} onChange={(e) => setPassword(e.target.value)}/> {/* Reads the inputted text and assign it to password const */}
+                    <input type='password' value={passwordTxt} onChange={(e) => setPassword(e.target.value)} placeholder='Password'/> {/* Reads the inputted text and assign it to password const */}
                 </label>
-
-                <div>
+                <p className='signin-text'>{signedIn}</p>
+                <div className='buttons'>
                     <button type='submit'>Submit</button>
                     <button onClick={registerPage}>Register</button> {/* Navigate */}
                 </div>
             </form>
+        </div>
         </div>
     )
 }

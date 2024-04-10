@@ -14,6 +14,7 @@ import ErrorPage from './Components/404/ErrorPage';
 
 import AdminRoute from './util/AdminRoute';
 import UserRoute from './util/UserRoute';
+import BothRoutes from './util/BothRoute';
 
 function App() {
   return (
@@ -31,7 +32,6 @@ function App() {
           {/*Only accessible to those in the "user role" */}
           <Route element={<UserRoute/>}>
             <Route element={<Homepage/>} path='/home' />
-            <Route element={<AccountSettings/>} path='/accountsettings'/>
             <Route element={<Editor/>} path='/editor'/>
             <Route element={<FlashcardSetPage/>} path='/flashcardSet/:id'/>
           </Route>
@@ -39,7 +39,14 @@ function App() {
           {/*Only accessible to those in the "admin role" */}
           <Route element={<AdminRoute/>}>
             <Route element={<AdminDashboard/>} path='/admin'/>
+            
           </Route>
+
+          {/*Accessible to both routes */} 
+          <Route element={<BothRoutes/>}>
+            <Route element={<AccountSettings/>} path='/accountsettings'/>
+          </Route>
+          
 
           
         </Routes>

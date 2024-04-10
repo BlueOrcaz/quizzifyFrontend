@@ -1,6 +1,11 @@
 
 export default function ErrorPage() {
     return(
-        <p>404 Not Found</p>
+        <div>
+            <h1>Quizzify</h1>
+            <h2>404 Not Found</h2>
+        </div>
+       
+        
     )
 }

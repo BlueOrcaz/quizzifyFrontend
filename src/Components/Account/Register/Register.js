@@ -17,7 +17,8 @@ export default function Register() {
         navigate('/login')
     }
 
-    const createAccount = async () => {
+    const createAccount = async (e) => {
+        e.preventDefault();
         try { 
             api.post("/api/v1/accounts/createAccount", {  // send post request to register new account in the backend 
                 username: `${username}`,
@@ -64,7 +65,7 @@ export default function Register() {
                     <input type='text' value={educationalRole} onChange={(e) => setEducationalRole(e.target.value)} placeholder="Educational Role"/>
                 </label>
                 <div>
-                    <button type='submit' onClick={login}>Submit</button>
+                    <button type='submit'>Submit</button>
                     <button onClick={login}>Login Page</button>  {/* Navigate back to login page */}
                 </div>
             </form>

@@ -139,6 +139,7 @@ export default function Editor() {
 
 
 
+
   const changeFlashcardSetType = (e) => { // change flashcard set type when needed
     setFlashcardSetType(e.target.value) // based off of drop down selection
   };
@@ -260,6 +261,7 @@ export default function Editor() {
       })
     })
   }
+
 
   const createDeck = async (flashcardType) => {
     switch (flashcardType) {
@@ -395,9 +397,11 @@ export default function Editor() {
       <h1 className='editor-h2'>Flashcard Set Editor</h1>
       <form>
         <div className='default-set'>
-          <label className='card-label'>Load in Existing Flashcard Deck</label> {/* Allows users to load in an object id for any flashcard that they've made */}
-          <input type="text" value={inputId} onChange={(e) => setInputId(e.target.value)} placeholder='Flashcard ID'></input>
-          <button type="button" onClick={loadFlashcardDetails}>Load in Exisitng Flashcard Set</button>
+          <div className='load-deck'>
+            <label className='card-label'>Load in Existing Flashcard Deck</label> {/* Allows users to load in an object id for any flashcard that they've made */}
+            <input type="text" value={inputId} onChange={(e) => setInputId(e.target.value)} placeholder='Flashcard ID'></input>
+            <button type="button" onClick={loadFlashcardDetails} disabled={inputId === ''}>Load in Exisitng Flashcard Set</button>
+          </div>
 
           <label className='card-label'>Set Name:</label>
           <input type="text" id='setName' value={flashcardSetName} onChange={(e) => setFlashcardSetName(e.target.value)} placeholder='Flashcard Set Name'></input>
@@ -405,13 +409,16 @@ export default function Editor() {
           <label className='card-label'>Set Description:</label>
           <textarea type="text" id='setDesciption' value={description} onChange={(e) => setDescription(e.target.value)} rows="15" className='flashcardset-text-area' placeholder='Flashcard Description'></textarea>
 
+        <div className='set-type'>
           <label className='card-label'>Flashcard Set Type</label>
           <select value={flashcardSetType} onChange={changeFlashcardSetType} className='select-editor'>
-            <option></option>
+            <option value="Empty"></option>
             <option value="Front, Back">Front, Back</option>
             <option value="Multiple Choice">Multiple Choice</option>
           </select>
+          </div>
           <br></br>
+        
         </div>
 
         {/* if it is a regular flashcard, then it will render the editor for front, back */}
@@ -423,17 +430,18 @@ export default function Editor() {
                 <label className='card-label'>Card {card.id}:</label>
                 <div className='red-button'>
                   {/* remove flashcard button, but it is disabled when there is only one card (inital card) */}
-                  <button type="button" onClick={() => removeFlashcard(card.id, "Front, Back")} disabled={cards.length === 1}>Remove</button>
-
+                  <div className='remove-button'>
+                    <button type="button" onClick={() => removeFlashcard(card.id, "Front, Back")} disabled={cards.length === 1}>Remove</button>
+                  </div>
                   <p className='card-label'>Front</p>
                   {/* input for the front side of the flashcard */}
-                  <input type="text" value={card.front} onChange={(e) => changeSide(card.id, e.target.value, "Front")} required />
+                  <input type="text" value={card.front} onChange={(e) => changeSide(card.id, e.target.value, "Front")} placeholder='Front of Flashcard'/>
 
                   <button type='button' onClick={() => clearFlashcardValue(card.id, 'front')} disabled={!card.front}>Clear Front</button>
 
                   <p className='card-label'>Back</p>
                   {/* input for the back side of the flashcard */}
-                  <input type="text" value={card.back} onChange={(e) => changeSide(card.id, e.target.value, "Back")} required />
+                  <input type="text" value={card.back} onChange={(e) => changeSide(card.id, e.target.value, "Back")} placeholder='Back of Flashcard'/>
                   <button type='button' onClick={() => clearFlashcardValue(card.id, 'back')} disabled={!card.back}>Clear Back</button>
                   <br />
                 </div>
@@ -494,7 +502,7 @@ export default function Editor() {
       <div className='editor-buttons'>
         <br></br>
         {/* calls const based on the click */}
-        <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={flashcardSetType === ""}>Create Deck</button>
+        <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={flashcardSetName===""}>Create Deck</button>
         <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetType === ""}>Update Flashcard Set</button>
         <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>

@@ -6,6 +6,38 @@
     text-align: center;
 }
 
+.load-deck {
+    width: 100%;
+}
+
+.load-deck button:disabled {
+    transform: none;
+    background-color: grey;
+}
+
+.red-button button:hover {
+    background-color: red; /* Change background color on hover */
+    transform: scale(1.05); /* Scale up the button slightly on hover */
+}
+.remove-button button:disabled {
+    transform: none;
+    background-color: gray;
+}
+
+.editor-buttons {
+    text-align: center;
+    margin: auto;
+    padding: 15px 0; 
+    display: block;
+    font-size: 14px; /* Increase font size for better readability */
+    width: 50%; /* Make button full width */
+}
+
+.editor-buttons :disabled {
+    transform: none;
+    background-color: gray;
+}
+
 .default-set {
     width: 600px;
     display: flex;
@@ -31,7 +63,7 @@
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    max-height: 70vh;
+    max-height: 90vh;
 }
 
 .card-container {
@@ -58,19 +90,8 @@
     display: block; /* Ensure the button takes full width */
 }
 
-.red-button button:hover {
-    background-color: red; /* Change background color on hover */
-    transform: scale(1.05); /* Scale up the button slightly on hover */
-}
 
-.editor-buttons {
-    text-align: center;
-    margin: auto;
-    padding: 15px 0; 
-    display: block;
-    font-size: 14px; /* Increase font size for better readability */
-    width: 50%; /* Make button full width */
-}
+
 
 .add-button {
     width: 100px; /* Adjust the width as needed */

@@ -42,6 +42,24 @@ export default function AccountSettings() {
     }
 
 
+    const deleteAccount = async () => {
+        try {
+            await api.delete(`/api/v1/accounts/deleteAccount/${substringuserid}`, {
+                params: {
+                    currentPassword: currentPassword.toString()
+                }
+            });
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            navigate('/login');
+        } catch (error) {
+            setStatus('Enter in your current password to delete account');
+            console.log(error);
+        }
+    }
+    
+
+
 
     const updateDetails = async (e) => {
         e.preventDefault();
@@ -82,7 +100,7 @@ export default function AccountSettings() {
     return (
         <div className='settings-wrapper'>
             <h1>Account Settings</h1>
-            <div>
+            <div className='settings-form'>
             <form onSubmit={updateDetails}>
                 <label>
                     <input defaultValue={username} type='text' disabled={true}/> {/* Username text disabled - Users cannot change username */}
@@ -104,8 +122,13 @@ export default function AccountSettings() {
                 </label>
                 <p className='settings-status-msg'>{status}</p>
                 <br></br>
-                <button type='submit'>Update Details</button> {/* On submit it updates the users details based off of the data as well as their password for verification */}
+                <div className='account-button'>
+                <button type='submit' disabled={currentPassword === ''}>Update Details</button> {/* On submit it updates the users details based off of the data as well as their password for verification */}
+                </div>
                 <button type='button' onClick={returnHomepage}>Dashboard</button> {/* Return to login page */}
+                <div className='account-button'>
+                <button type='button' onClick={deleteAccount} disabled={currentPassword === ''}>Delete Account</button> {/* Deletes the user account */}
+                </div>
             </form>
             </div>
         </div>

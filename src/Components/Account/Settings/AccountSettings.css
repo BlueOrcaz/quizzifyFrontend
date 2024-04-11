@@ -5,8 +5,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center; 
-    border: 3px solid var(--accent);
-    width: 350px; 
+    border: 5px solid var(--accent);
+    width: 400px; 
     padding: 20px; 
     box-sizing: border-box;
 }
@@ -18,4 +18,13 @@
     justify-content: center; 
     text-align: center;
     font-size: 14px;
+}
+
+.settings-form {
+    width: 100%;
+}
+
+.account-button :disabled {
+    background-color: grey;
+    transform: none;
 }

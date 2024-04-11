@@ -114,9 +114,12 @@
 }
 
 
-
-
 .add-button {
     width: 100px; /* Adjust the width as needed */
     height: 100px; /* Set height equal to width */
+}
+
+.creation-error-label {
+    color: red;
+    font-weight: bold;
 }

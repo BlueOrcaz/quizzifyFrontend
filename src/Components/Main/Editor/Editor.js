@@ -19,8 +19,16 @@ export default function Editor() {
   // flashcard set id constant
   const [inputId, setInputId] = useState('');
 
+  // flashcard creation/update error messages
+  const [createMsg, setCreateMsg] = useState('');
+  const [updateMsg, setUpdateMsg] = useState('');
+  const [loadMsg, setLoadMsg]  = useState('');
 
-
+  // generated id msgs
+  const createdFlashcardID = localStorage.getItem('createdFlashcardID');
+  let substringFlashcardId = createdFlashcardID.substring(1, createdFlashcardID.length - 1);
+  const websiteLink = `http://localhost:3000/flashcardSet/${substringFlashcardId}`;
+  const [displayLinkTxt, setDisplayLinkTxt] = useState('');
 
 
   // retrieve user id
@@ -282,7 +290,11 @@ export default function Editor() {
           });
           localStorage.setItem('createdFlashcardID', JSON.stringify(response.data)); // backend returns the flashcard object id as a string
           console.log("flashcardID: ", response.data);
+          setDisplayLinkTxt("Link");
+          setCreateMsg("");
         } catch (error) {
+          setDisplayLinkTxt("");
+          setCreateMsg("Failed to Create Flashcard Set");
           console.log(error);
         }
         break;
@@ -299,7 +311,11 @@ export default function Editor() {
           });
           localStorage.setItem('createdFlashcardID', JSON.stringify(response.data));
           console.log("flashcardID: ", response.data);
+          setDisplayLinkTxt("Link");
+          setCreateMsg("");
         } catch (error) {
+          setDisplayLinkTxt("");
+          setCreateMsg("Failed to Create Flashcard Set");
           console.log(error);
         }
         break;
@@ -330,6 +346,7 @@ export default function Editor() {
           setFlashcardSetType(response.data['setType']);
           setMultipleChoiceCards(response.data['mcqFlashcards']);
         } catch (error) {
+          setLoadMsg("Failed to Load Flashcard Set");
           console.log(error);
         }
         break;
@@ -343,6 +360,7 @@ export default function Editor() {
           setFlashcardSetType(response.data['setType']);
           setMultipleChoiceCards(response.data['mcqFlashcards']);
         } catch (error) {
+          setLoadMsg("Failed to Load Flashcard Set");
           console.log(error);
         }
         break;
@@ -367,7 +385,9 @@ export default function Editor() {
             }))
           });
           //console.log(response.data); debugging
+          setUpdateMsg("")
         } catch (error) {
+          setUpdateMsg("Failed to Update Flashcard Set!")
           console.log(error);
         }
         break;
@@ -379,9 +399,11 @@ export default function Editor() {
             name: flashcardSetName,
             description: description,
             mcqFlashcards: multipleChoiceCards
-          })
+          });
+          setUpdateMsg("")
           //console.log(response.data);
         } catch (error) {
+          setUpdateMsg("Failed to Update Flashcard Set!")
           console.log(error);
         }
         break;
@@ -402,6 +424,7 @@ export default function Editor() {
             <input type="text" value={inputId} onChange={(e) => setInputId(e.target.value)} placeholder='Flashcard ID'></input>
             <button type="button" onClick={loadFlashcardDetails} disabled={inputId === ''}>Load in Exisitng Flashcard Set</button>
           </div>
+          <p className='creation-error-label'>{loadMsg}</p>
 
           <label className='card-label'>Set Name:</label>
           <input type="text" id='setName' value={flashcardSetName} onChange={(e) => setFlashcardSetName(e.target.value)} placeholder='Flashcard Set Name'></input>
@@ -505,18 +528,28 @@ export default function Editor() {
       <div className='editor-buttons'>
         <br></br>
         {/* calls const based on the click */}
+        {/* buttons are disabled when any value is not filled. */}
         <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={
           flashcardSetName === "" ||
           flashcardSetType === "Empty" ||
           description === "" ||
           inputId !== ""
         }>Create Deck</button>
-
+        {/* Error Messages/created flashcard Link */}
+        <p className='creation-error-label'>{createMsg}</p>
+        <a href={websiteLink}>{displayLinkTxt}</a>
+        <br></br>
+        <br></br>
         <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetName === "" ||
           flashcardSetType === "Empty" ||
           description === "" ||
           inputId === ""
         }>Update Flashcard Set</button>
+        {/* Error Messages*/}
+        <p className='creation-error-label'>{updateMsg}</p>
+        <br></br>
+
+        {/* return back to the homepage */}
         <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>
     </div>

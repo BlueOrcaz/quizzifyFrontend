@@ -409,16 +409,16 @@ export default function Editor() {
           <label className='card-label'>Set Description:</label>
           <textarea type="text" id='setDesciption' value={description} onChange={(e) => setDescription(e.target.value)} rows="15" className='flashcardset-text-area' placeholder='Flashcard Description'></textarea>
 
-        <div className='set-type'>
-          <label className='card-label'>Flashcard Set Type</label>
-          <select value={flashcardSetType} onChange={changeFlashcardSetType} className='select-editor'>
-            <option value="Empty"></option>
-            <option value="Front, Back">Front, Back</option>
-            <option value="Multiple Choice">Multiple Choice</option>
-          </select>
+          <div className='set-type'>
+            <label className='card-label'>Flashcard Set Type</label>
+            <select value={flashcardSetType} onChange={changeFlashcardSetType} className='select-editor'>
+              <option value="Empty"></option>
+              <option value="Front, Back">Front, Back</option>
+              <option value="Multiple Choice">Multiple Choice</option>
+            </select>
           </div>
           <br></br>
-        
+
         </div>
 
         {/* if it is a regular flashcard, then it will render the editor for front, back */}
@@ -435,13 +435,13 @@ export default function Editor() {
                   </div>
                   <p className='card-label'>Front</p>
                   {/* input for the front side of the flashcard */}
-                  <input type="text" value={card.front} onChange={(e) => changeSide(card.id, e.target.value, "Front")} placeholder='Front of Flashcard'/>
+                  <input type="text" value={card.front} onChange={(e) => changeSide(card.id, e.target.value, "Front")} placeholder='Front of Flashcard' />
 
                   <button type='button' onClick={() => clearFlashcardValue(card.id, 'front')} disabled={!card.front}>Clear Front</button>
 
                   <p className='card-label'>Back</p>
                   {/* input for the back side of the flashcard */}
-                  <input type="text" value={card.back} onChange={(e) => changeSide(card.id, e.target.value, "Back")} placeholder='Back of Flashcard'/>
+                  <input type="text" value={card.back} onChange={(e) => changeSide(card.id, e.target.value, "Back")} placeholder='Back of Flashcard' />
                   <button type='button' onClick={() => clearFlashcardValue(card.id, 'back')} disabled={!card.back}>Clear Back</button>
                   <br />
                 </div>
@@ -456,10 +456,10 @@ export default function Editor() {
 
         {/* if it is a mcq, then it will render the editor for mcq flashcards */}
         {flashcardSetType === 'Multiple Choice' && (
-          <div>
+          <div className='mcq-components'>
             {/* iterates over each element in cards array and returns each card as a container. When it starts, then there will only be one card container. But when preloading, it will load in the number of ids in flashcards */}
             {multipleChoiceCards.map(card => (
-              <div key={card.id} className="card-container">
+              <div key={card.id} className="mcq-container">
                 <label>Question {card.id}:</label>
                 <div className='remove-button'>
                   <button type="button" onClick={() => removeFlashcard(card.id, "Multiple Choice")} disabled={multipleChoiceCards.length === 1}>Remove</button>
@@ -472,26 +472,29 @@ export default function Editor() {
                     <div key={index}>
                       <p className='card-label'>Option {index + 1}</p>
                       <input type="text" value={option.option} onChange={(e) => changeMCQSide(card.id, index, e.target.value)} />
-                      <select value={option.correctAnswer} onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)}>
+
+                      <select value={option.correctAnswer} onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)} className='select-editor'>
                         <option value="">Select Answer</option>
                         <option value="true">Correct Option</option>
                         <option value="false">Incorrect Option</option>
                       </select>
+                      <br></br>
+                      <br></br>
                       <button type='button' onClick={() => removeOption(card.id, index)} disabled={card.allOptions.length === 1}>Remove Option</button>
                       <button type='button' onClick={() => clearMCQField(card.id, index)}>Clear Field</button>
-                      <div>
-                        <button type='button' onClick={() => addOption(card.id)} disabled={card.allOptions.length === 4}>Add Option</button>
-                      </div>
+
                     </div>
                   ))}
+                </div>
+                <div className='mcq-add-option'>
+                  <button type='button' onClick={() => addOption(card.id)} disabled={card.allOptions.length === 4}>+</button>
                 </div>
 
               </div>
             ))}
             <br></br>
-            <div>
+            <div className='mcq-add-button'>
               <button type='button' onClick={() => addFlashcard('Multiple Choice')}>Add MCQ</button>
-
             </div>
           </div>
 
@@ -502,8 +505,18 @@ export default function Editor() {
       <div className='editor-buttons'>
         <br></br>
         {/* calls const based on the click */}
-        <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={flashcardSetName===""}>Create Deck</button>
-        <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetType === ""}>Update Flashcard Set</button>
+        <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={
+          flashcardSetName === "" ||
+          flashcardSetType === "Empty" ||
+          description === "" ||
+          inputId !== ""
+        }>Create Deck</button>
+
+        <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetName === "" ||
+          flashcardSetType === "Empty" ||
+          description === "" ||
+          inputId === ""
+        }>Update Flashcard Set</button>
         <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>
     </div>

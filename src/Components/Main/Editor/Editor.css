@@ -74,6 +74,29 @@
     border: 5px solid var(--accent);
 }
 
+.mcq-components {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 100vh;
+}
+.mcq-container {
+    width: 80%;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 30px;
+    border: 5px solid var(--accent);
+}
+
+.mcq-add-button {
+    width: 80%;
+}
+
+.mcq-add-option {
+    width: 30%;
+    margin: auto;
+}
 
 .card-label {
     font-size: 20px;

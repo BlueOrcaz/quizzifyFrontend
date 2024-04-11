@@ -106,10 +106,10 @@ export default function AccountSettings() {
                     <input defaultValue={username} type='text' disabled={true}/> {/* Username text disabled - Users cannot change username */}
                 </label>
                 <label>
-                    <input type='text' onChange={(e) => setCurrentPassword(e.target.value)} placeholder='Current Password'/> {/* Sets the current password based off of user input, stores in password const*/}
+                    <input type='password' onChange={(e) => setCurrentPassword(e.target.value)} placeholder='Current Password'/> {/* Sets the current password based off of user input, stores in password const*/}
                 </label>
                 <label>
-                    <input type='text' onChange={(e) => setNewPassword(e.target.value)} placeholder='New Password'/>
+                    <input type='password' onChange={(e) => setNewPassword(e.target.value)} placeholder='New Password'/>
                 </label>
                 <label>
                     <input defaultValue={dateOfBirth} type='text' onChange={(e) => setDateOfBirth(e.target.value)} placeholder='Date Of Birth'/>

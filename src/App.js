@@ -9,6 +9,8 @@ import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import AccountSettings from './Components/Account/Settings/AccountSettings';
 import Editor from './Components/Main/Editor/Editor';
 import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
+import UserCreations from './Components/Main/UserCreations/UserCreations';
+
 
 import ErrorPage from './Components/404/ErrorPage';
 
@@ -34,6 +36,7 @@ function App() {
             <Route element={<Homepage/>} path='/home' />
             <Route element={<Editor/>} path='/editor'/>
             <Route element={<FlashcardSetPage/>} path='/flashcardSet/:id'/>
+            <Route element={<UserCreations/>} path='/creations'/>
           </Route>
 
           {/*Only accessible to those in the "admin role" */}
@@ -47,6 +50,7 @@ function App() {
             <Route element={<AccountSettings/>} path='/accountsettings'/>
           </Route>
           
+
 
           
         </Routes>

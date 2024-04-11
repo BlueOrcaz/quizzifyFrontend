@@ -5,10 +5,6 @@ import api from '../../../api/axiosConfig';
 export default function Homepage() {
     const navigate = useNavigate(); // react routes
 
-
-
-
-
     const signOut = async (e) => {
         e.preventDefault(); // prevent default error from occurring
         try {
@@ -28,19 +24,19 @@ export default function Homepage() {
     const quizEditor = () => {
         navigate('/editor');
     }
+
+    const creations = () => {
+        navigate('/creations');
+    }
     
     return (
         <div>
             <h1>Quizzify Dashboard</h1>
             {/* Call out consts on click */}
-            <button type="button">Your Flashcard Sets</button>
+            <button type="button" onClick={creations}>Your Flashcard Sets</button>
             <button type="button" onClick={quizEditor}>Flashcards Editor</button>
             <button type="button" onClick={accountSettings}>Account Settings</button>
             <button type="button" onClick={signOut}>Sign Out</button>
         </div>
-        
-        
-        
-        
     )
 }

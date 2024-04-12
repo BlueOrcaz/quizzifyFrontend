@@ -1,0 +1,44 @@
+.folder-editor {
+    text-align: center;
+}
+
+.flashcard-set-button {
+    width: 120px; /* Set desired width */
+    height: 120px; /* Set desired height */
+    margin: 5px; /* Set margin between buttons */
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard-set-grid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    max-height: 30vh;
+    max-width: 600px;
+}
+
+.add-container {
+    display: flex; /* Use flexbox */
+    align-items: center; /* Align items vertically */
+    width: 450px;
+}
+  
+.add-container input {
+    width: 100%;
+    margin-right: 5px; /* Add some space between input and button */
+}
+
+.add-container button {
+    width: 10%;
+}
+
+.folder-buttons button:disabled {
+    transform: none;
+    background-color: gray;
+}

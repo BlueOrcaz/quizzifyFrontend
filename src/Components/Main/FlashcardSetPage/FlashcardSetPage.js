@@ -101,7 +101,8 @@ export default function FlashcardSetPage() {
         };
 
         fetchFlashcardDetails();
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const seconds = date / 1000;
     const myDate = new Date(seconds * 1000);  // epoch time - dunno why it doesnt work properly if not divided by 1000 then multiplied by 1000

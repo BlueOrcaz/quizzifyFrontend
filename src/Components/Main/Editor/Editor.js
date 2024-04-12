@@ -531,7 +531,7 @@ export default function Editor() {
         {/* buttons are disabled when any value is not filled. */}
         <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={
           flashcardSetName === "" ||
-          flashcardSetType === "Empty" ||
+          flashcardSetType === "" ||
           description === "" ||
           inputId !== ""
         }>Create Deck</button>
@@ -541,7 +541,7 @@ export default function Editor() {
         <br></br>
         <br></br>
         <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetName === "" ||
-          flashcardSetType === "Empty" ||
+          flashcardSetType === "" ||
           description === "" ||
           inputId === ""
         }>Update Flashcard Set</button>

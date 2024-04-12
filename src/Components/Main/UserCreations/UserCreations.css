@@ -1,0 +1,59 @@
+.created-flashcard-sets-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flashcard-set-grid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    max-height: 30vh;
+    max-width: 600px;
+}
+
+.created-folders-grid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    max-height: 30vh;
+    max-width: 600px;
+}
+
+
+.h-load {
+   text-align: center; 
+}
+
+.flashcard-set-button {
+    width: 120px; /* Set desired width */
+    height: 120px; /* Set desired height */
+    margin: 5px; /* Set margin between buttons */
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.folder-button {
+    width: 120px; /* Set desired width */
+    height: 120px; /* Set desired height */
+    margin: 5px; /* Set margin between buttons */
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-button {
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+

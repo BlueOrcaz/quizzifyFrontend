@@ -26,9 +26,14 @@ export default function Editor() {
 
   // generated id msgs
   const createdFlashcardID = localStorage.getItem('createdFlashcardID');
+  let websiteLink = '';
+
+if (createdFlashcardID) {
   let substringFlashcardId = createdFlashcardID.substring(1, createdFlashcardID.length - 1);
-  const websiteLink = `http://localhost:3000/flashcardSet/${substringFlashcardId}`;
-  const [displayLinkTxt, setDisplayLinkTxt] = useState('');
+  websiteLink = `http://localhost:3000/flashcardSet/${substringFlashcardId}`;
+}
+
+const [displayLinkTxt, setDisplayLinkTxt] = useState(websiteLink);
 
 
   // retrieve user id

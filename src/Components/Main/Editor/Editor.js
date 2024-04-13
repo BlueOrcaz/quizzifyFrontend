@@ -24,16 +24,7 @@ export default function Editor() {
   const [updateMsg, setUpdateMsg] = useState('');
   const [loadMsg, setLoadMsg]  = useState('');
 
-  // generated id msgs
-  const createdFlashcardID = localStorage.getItem('createdFlashcardID');
-  let websiteLink = '';
 
-if (createdFlashcardID) {
-  let substringFlashcardId = createdFlashcardID.substring(1, createdFlashcardID.length - 1);
-  websiteLink = `http://localhost:3000/flashcardSet/${substringFlashcardId}`;
-}
-
-const [displayLinkTxt, setDisplayLinkTxt] = useState(websiteLink);
 
 
   // retrieve user id
@@ -297,6 +288,7 @@ const [displayLinkTxt, setDisplayLinkTxt] = useState(websiteLink);
           console.log("flashcardID: ", response.data);
           setDisplayLinkTxt("Link");
           setCreateMsg("");
+          navigate('/creations');
         } catch (error) {
           setDisplayLinkTxt("");
           setCreateMsg("Failed to Create Flashcard Set");
@@ -318,6 +310,7 @@ const [displayLinkTxt, setDisplayLinkTxt] = useState(websiteLink);
           console.log("flashcardID: ", response.data);
           setDisplayLinkTxt("Link");
           setCreateMsg("");
+          navigate('/creations');
         } catch (error) {
           setDisplayLinkTxt("");
           setCreateMsg("Failed to Create Flashcard Set");
@@ -542,7 +535,6 @@ const [displayLinkTxt, setDisplayLinkTxt] = useState(websiteLink);
         }>Create Deck</button>
         {/* Error Messages/created flashcard Link */}
         <p className='creation-error-label'>{createMsg}</p>
-        <a href={websiteLink}>{displayLinkTxt}</a>
         <br></br>
         <br></br>
         <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetName === "" ||

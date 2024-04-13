@@ -65,13 +65,13 @@ export default function FolderEditor() {
             const response = await api.get(`/api/v1/folders/${id}`);
             const flashcardIds = response.data['storedFlashcardSets'];
             setFolderName(response.data['folderName']);
-    
+
             // Fetch data for each flashcard set
             const setsData = await Promise.all(flashcardIds.map(async (setId) => {
                 const response = await api.get(`/api/v1/flashcardSets/${setId}`);
                 return { setId, data: response.data };
             }));
-    
+
             // Set the loaded flashcard sets and their IDs
             setFlashcardSetIds(flashcardIds);
             setFlashcardSets(setsData);
@@ -80,7 +80,7 @@ export default function FolderEditor() {
             //console.log("Error loading flashcard sets:", error);
         }
     }
-    
+
     // Load flashcard sets when id changes or when flashcardSetIds change
     useEffect(() => {
         // Load flashcard sets only if id is present
@@ -91,7 +91,7 @@ export default function FolderEditor() {
     }, [id]);
 
 
-    
+
     // Update flashcard sets when flashcardSetIds change
     useEffect(() => {
         const fetchData = async () => {
@@ -106,7 +106,7 @@ export default function FolderEditor() {
                 setErrorText('Error Fetching Flashcard Set');
             }
         };
-    
+
         // Fetch data only if flashcardSetIds exist
         if (flashcardSetIds.length > 0) {
             fetchData();
@@ -131,7 +131,7 @@ export default function FolderEditor() {
         })
         setErrorText('Saved');
     }
-    
+
     const redirect = (id) => {
         navigate(`/flashcardSet/${id}`)
     }
@@ -150,10 +150,10 @@ export default function FolderEditor() {
         loadExistingFlashcardSets();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
 
-    
-    
+
+
+
 
     return (
         <div>
@@ -166,17 +166,19 @@ export default function FolderEditor() {
                 <div className='flashcard-set-grid'>
                     {flashcardSets && flashcardSets.length > 0 ? (
                         flashcardSets.map((flashcardSet, index) => (
-                            <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
-                            {flashcardSet.data.name}
-                        </button>
+                            flashcardSet.data ? (
+                                <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
+                                    {flashcardSet.data.name}
+                                </button>
+                            ) : null
                         ))
                     ) : (
-                        <p>Empty Folder</p>
+                        <p>{flashcardSets.every(set => !set.data) ? 'Empty Folder' : ''}</p>
                     )}
-                
-                
                 </div>
-                
+
+
+
                 <label className='labels'>Add in Existing Flashcard Sets</label>
                 <div className='flashcard-set-grid'>
                     {existingFlashcardSets && existingFlashcardSets.length > 0 ? (

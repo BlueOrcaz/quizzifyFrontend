@@ -3,9 +3,9 @@
 }
 
 .flashcard-set-button {
-    width: 120px; /* Set desired width */
-    height: 120px; /* Set desired height */
-    margin: 5px; /* Set margin between buttons */
+    width: 120px;
+    height: 120px; 
+    margin: 5px; 
     border: none;
     display: flex;
     justify-content: center;
@@ -24,14 +24,14 @@
 }
 
 .add-container {
-    display: flex; /* Use flexbox */
-    align-items: center; /* Align items vertically */
+    display: flex; 
+    align-items: center; 
     width: 450px;
 }
   
 .add-container input {
     width: 100%;
-    margin-right: 5px; /* Add some space between input and button */
+    margin-right: 5px; 
 }
 
 .add-container button {

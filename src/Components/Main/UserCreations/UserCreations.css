@@ -25,15 +25,14 @@
     max-width: 600px;
 }
 
-
 .h-load {
    text-align: center; 
 }
 
 .flashcard-set-button {
-    width: 120px; /* Set desired width */
-    height: 120px; /* Set desired height */
-    margin: 5px; /* Set margin between buttons */
+    width: 120px; 
+    height: 120px;
+    margin: 5px;
     border: none;
     display: flex;
     justify-content: center;
@@ -41,9 +40,9 @@
 }
 
 .folder-button {
-    width: 120px; /* Set desired width */
-    height: 120px; /* Set desired height */
-    margin: 5px; /* Set margin between buttons */
+    width: 120px; 
+    height: 120px; 
+    margin: 5px;
     border: none;
     display: flex;
     justify-content: center;

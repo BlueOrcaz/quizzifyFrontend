@@ -24,9 +24,6 @@ export default function Editor() {
   const [updateMsg, setUpdateMsg] = useState('');
   const [loadMsg, setLoadMsg]  = useState('');
 
-
-
-
   // retrieve user id
   let userid = localStorage.getItem('currentId');
   let substringuserid = userid.substring(1, userid.length - 1) // remove the stupid double quotations from my string

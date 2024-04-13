@@ -37,15 +37,15 @@ button {
     text-align: center;
     padding: 10px 0; 
     display: block;
-    font-size: 14px; /* Increase font size for better readability */
-    width: 100%; /* Make button full width */
-    margin-bottom: 10px; /* Add margin bottom for better separation */
-    transition: background-color 0.3s, transform 0.3s; /* Add transition for background-color and transform */
+    font-size: 14px;
+    width: 100%; 
+    margin-bottom: 10px; 
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 button:hover {
-    background-color: var(--accent); /* Change background color on hover */
-    transform: scale(1.05); /* Scale up the button slightly on hover */
+    background-color: var(--accent); 
+    transform: scale(1.05); 
 }
 
 label {
@@ -63,6 +63,6 @@ input {
     flex-direction: column;
     border-radius: 5px;
     width: 100%;
-    padding: 15px; /* Add padding for better touch interaction */
-    margin-bottom: 10px; /* Add margin bottom for better separation */
+    padding: 15px; 
+    margin-bottom: 10px; 
 }

@@ -42,3 +42,23 @@
     transform: none;
     background-color: gray;
 }
+
+.delete-folder-button:hover {
+    transform: none;
+    background-color: red;
+}
+
+
+.delete-folder-button:disabled {
+    transform: none;
+    background-color: grey;
+}
+
+
+.labels {
+    font-weight: bold;
+}
+
+.error-text {
+    text-align: center;
+}

@@ -20,6 +20,9 @@
     font-size: 14px;
 }
 
+
+
+
 .settings-form {
     width: 100%;
 }
@@ -27,4 +30,9 @@
 .account-button :disabled {
     background-color: grey;
     transform: none;
+}
+
+.account-button .delete-button:hover {
+    background-color: red;
+    transform: scale(1.05);
 }

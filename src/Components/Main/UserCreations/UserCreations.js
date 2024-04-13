@@ -10,14 +10,14 @@ export default function UserCreations() {
 
     const navigate = useNavigate();
 
-    
+
     let userid = localStorage.getItem('currentId'); // retrieve user id
     let substringuserid = userid.substring(1, userid.length - 1); // remove the double quotations from the string
 
     const loadFlashcardSets = async () => {
         const response = await api.get(`/api/v1/accounts/${substringuserid}`);
         const flashcardSetsIds = response.data['createdFlashcardSetsArrayList'];
-    
+
         const setsData = await Promise.all(flashcardSetsIds.map(async (setId) => {
             const setObjectResponse = await api.get(`/api/v1/flashcardSets/${setId}`);
             return { setId, data: setObjectResponse.data }; // return an object with setId and data
@@ -43,7 +43,7 @@ export default function UserCreations() {
         loadFolders();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
 
 
 
@@ -73,9 +73,14 @@ export default function UserCreations() {
             <h2 className='h-load'>Created Folders: </h2>
             <div className='created-folders-wrapper'>
                 <div className='created-folders-grid'>
-                    {folders.map((folder, index) => (
-                        <button key={index} className='folder-button' onClick={() => folderRedirect(folder.folderId)}>{folder.data.folderName}</button>
-                    ))}
+                    {folders && folders.length > 0 ? (
+                        folders.map((folder, index) => (
+                            <button key={index} className='folder-button' onClick={() => folderRedirect(folder.folderId)}>{folder.data.folderName}</button>
+                        ))
+                    ) : (
+                        <p>No Folders available yet.</p>
+                    )}
+
                 </div>
                 <br></br>
                 <div className='dashboard-button'>
@@ -86,11 +91,16 @@ export default function UserCreations() {
 
             <div className='created-flashcard-sets-wrapper'>
                 <div className='flashcard-set-grid'>
-                    {flashcardSets.map((flashcardSet, index) => (
-                        <button key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
-                            {flashcardSet.data.name}
-                        </button>
-                    ))}
+                    {flashcardSets && flashcardSets.length > 0 ? (
+                        flashcardSets.map((flashcardSet, index) => (
+                            <button key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
+                                {flashcardSet.data && flashcardSet.data.name ? flashcardSet.data.name : 'N/A'}
+                            </button>
+                        ))
+                    ) : (
+                        <p>No flashcard sets available yet.</p>
+                    )}
+
                 </div>
             </div>
             <br></br>

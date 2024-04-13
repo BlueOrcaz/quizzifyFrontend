@@ -8,8 +8,10 @@ export default function FolderEditor() {
     const [flashcardSetIds, setFlashcardSetIds] = useState([]);
     const [flashcardSets, setFlashcardSets] = useState([]);
 
+    const [existingFlashcardSets, setExistingFlashcardSets] = useState([]);
+
     const [folderName, setFolderName] = useState('');
-    const [setId, setSetId] = useState('');
+    const [errorText, setErrorText] = useState('');
 
     let userid = localStorage.getItem('currentId');
     let substringuserid = userid.substring(1, userid.length - 1) // remove the stupid double quotations from my string
@@ -30,26 +32,31 @@ export default function FolderEditor() {
             storedFlashcardSets: flashcardSetIds
         })
         localStorage.setItem('createdFolderId', JSON.stringify(response.data)); // backend returns the flashcard object id as a string
-        console.log(response.data);
+        //console.log(response.data);
+        setErrorText('Saved');
+        navigate('/creations');
     }
 
-    const addFlashcardId = async () => {
-        if (setId.trim() !== '') {
+    const addFlashcardId = async (flashcardsetid) => {
+        if (flashcardsetid.trim() !== '') {
             try {
-                await api.get(`/api/v1/flashcardSets/${setId}`);
+                //console.log(flashcardsetid);
+                await api.get(`/api/v1/flashcardSets/${flashcardsetid}`);
 
-                if (!flashcardSetIds.includes(setId)) {
+                if (!flashcardSetIds.includes(flashcardsetid)) {
                     // If the ID is not a duplicate, add it to the array
-                    setFlashcardSetIds(prevArray => [...prevArray, setId]);
+                    setFlashcardSetIds(prevArray => [...prevArray, flashcardsetid]);
+                    setErrorText('');
                 } else {
-                    console.log("Flashcard set ID already exists in the array.");
+                    //console.log("Flashcard set ID already exists in the array.");
+                    setErrorText('Already Exists in Folder');
                 }
             } catch (error) {
-                console.log("Error adding flashcard set:", error);
+                setErrorText('Error Loading Flashcard Set');
+                //console.log("Error adding flashcard set:", error);
             }
         }
         // Clear input value after adding to array
-        setSetId('');
     };
 
     const loadFlashcardSets = async () => {
@@ -69,7 +76,8 @@ export default function FolderEditor() {
             setFlashcardSetIds(flashcardIds);
             setFlashcardSets(setsData);
         } catch (error) {
-            console.log("Error loading flashcard sets:", error);
+            setErrorText('Error Loading Flashcard Sets');
+            //console.log("Error loading flashcard sets:", error);
         }
     }
     
@@ -79,7 +87,10 @@ export default function FolderEditor() {
         if (id) {
             loadFlashcardSets();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
+
+
     
     // Update flashcard sets when flashcardSetIds change
     useEffect(() => {
@@ -92,6 +103,7 @@ export default function FolderEditor() {
                 setFlashcardSets(setsData);
             } catch (error) {
                 console.log("Error fetching flashcard sets:", error);
+                setErrorText('Error Fetching Flashcard Set');
             }
         };
     
@@ -101,18 +113,43 @@ export default function FolderEditor() {
         }
     }, [flashcardSetIds]);
 
+    const deleteFolder = async () => {
+        try {
+            await api.delete(`/api/v1/folders/deleteFolder/${id}?authorId=${substringuserid}`);
+            navigate('/creations');
+        } catch (error) {
+            //console.log(error);
+            setErrorText('Error deleteing folder')
+        }
+    }
+
     const updateFolder = async () => {
         await api.put(`/api/v1/folders/update/${id}?authorId=${substringuserid}`, {
             authorId: substringuserid,
             folderName: folderName,
             storedFlashcardSets: flashcardSetIds
         })
+        setErrorText('Saved');
     }
     
     const redirect = (id) => {
         navigate(`/flashcardSet/${id}`)
     }
 
+    const loadExistingFlashcardSets = async () => {
+        const response = await api.get(`/api/v1/accounts/${substringuserid}`);
+        const flashcardSetsIds = response.data['createdFlashcardSetsArrayList'];
+        const setsData = await Promise.all(flashcardSetsIds.map(async (setId) => {
+            const setObjectResponse = await api.get(`/api/v1/flashcardSets/${setId}`);
+            return { setId, data: setObjectResponse.data }; // return an object with setId and data
+        }));
+        setExistingFlashcardSets(setsData);
+    }
+
+    useEffect(() => {
+        loadExistingFlashcardSets();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     
 
     
@@ -124,21 +161,36 @@ export default function FolderEditor() {
             <form>
                 <label>Folder Name</label>
                 <input type="text" value={folderName} onChange={(e) => setFolderName(e.target.value)} placeholder='Folder Name'></input>
-                <label>Stored Flashcards</label>
+                <button className='delete-folder-button' type='button' onClick={deleteFolder} disabled={id === undefined}>Delete Folder</button>
+                <label className='labels'>Stored Flashcards</label>
                 <div className='flashcard-set-grid'>
-                {flashcardSets.map((flashcardSet, index) => (
-                    <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
-                    {flashcardSet.data.name}
-                </button>
-                ))}
+                    {flashcardSets && flashcardSets.length > 0 ? (
+                        flashcardSets.map((flashcardSet, index) => (
+                            <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
+                            {flashcardSet.data.name}
+                        </button>
+                        ))
+                    ) : (
+                        <p>Empty Folder</p>
+                    )}
+                
                 
                 </div>
                 
-                <label>Add in Flashcard Sets</label>
-                <div className="add-container">
-                    <input type="text" value={setId} onChange={(e) => setSetId(e.target.value)} placeholder='Set Name/ID/Link'></input>
-                    <button type='button' onClick={addFlashcardId}>+</button>   
+                <label className='labels'>Add in Existing Flashcard Sets</label>
+                <div className='flashcard-set-grid'>
+                    {existingFlashcardSets && existingFlashcardSets.length > 0 ? (
+                        existingFlashcardSets.map((flashcardSet, index) => (
+                            <button type='button' key={index} className='flashcard-set-button' onClick={() => addFlashcardId(flashcardSet.setId)}>
+                                {flashcardSet.data && flashcardSet.data.name ? flashcardSet.data.name : 'N/A'}
+                            </button>
+                        ))
+                    ) : (
+                        <p>No flashcard sets available yet.</p>
+                    )}
                 </div>
+                <br></br>
+                <p className='error-text'>{errorText}</p>
                 <br></br>
                 <div className='folder-buttons'>
                     <button type='button' onClick={updateFolder} disabled={id === undefined}>Save</button>

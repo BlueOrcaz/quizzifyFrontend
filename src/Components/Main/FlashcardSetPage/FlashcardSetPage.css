@@ -17,6 +17,12 @@
     transform: rotateY(180deg);
 }
 
+.homepage-button .red-button:hover {
+    background-color: red;
+    transform: scale(1.05);
+}
+
+
 .editor-wrapper {
     background-color: var(--background);
     border-radius: 15px;

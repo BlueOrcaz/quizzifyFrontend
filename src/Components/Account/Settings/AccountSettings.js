@@ -127,7 +127,7 @@ export default function AccountSettings() {
                 </div>
                 <button type='button' onClick={returnHomepage}>Dashboard</button> {/* Return to login page */}
                 <div className='account-button'>
-                <button type='button' onClick={deleteAccount} disabled={currentPassword === ''}>Delete Account</button> {/* Deletes the user account */}
+                <button className='delete-button' type='button' onClick={deleteAccount} disabled={currentPassword === ''}>Delete Account</button> {/* Deletes the user account */}
                 </div>
             </form>
             </div>

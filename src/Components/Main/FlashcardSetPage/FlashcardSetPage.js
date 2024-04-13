@@ -29,6 +29,11 @@ export default function FlashcardSetPage() {
 
     const { id } = useParams(); // use parameters based off of the route link id
 
+    // retrieve user id
+    let userid = localStorage.getItem('currentId');
+    let substringuserid = userid.substring(1, userid.length - 1) // remove the stupid double quotations from my string
+
+
     const navigate = useNavigate();
 
     const dashboard = () => {
@@ -43,6 +48,15 @@ export default function FlashcardSetPage() {
             setCurrentId(currentId < multipleChoiceCards.length - 1 ? currentId + 1 : currentId); // same thing but for mcq cards
         }
     };
+
+    const deleteFlashcardSet = async () => {
+        try {
+            await api.delete(`/api/v1/flashcardSets/deleteFlashcardSet/${id}?authorId=${substringuserid}`);
+            navigate('/home');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const showPrevCard = () => {
         setCurrentId(currentId > 0 ? currentId - 1 : currentId); // checks if the current id is greater then 0. If it is, then that means its not on last index and can decrement
@@ -120,7 +134,9 @@ export default function FlashcardSetPage() {
             <div className='homepage-button'>
                 {/* return to homepage button */}
                 <button type='button' onClick={dashboard} >Return to Homepage</button>
+                <button className='red-button' type='button' onClick={deleteFlashcardSet}>Delete FlashcardSet</button>
             </div>
+            
             {/* if the deck type is front, back then itll display differing buttons and ability to flip cards */}
             {type === 'Front, Back' && (
                 <div className='front-back-wrapper'>

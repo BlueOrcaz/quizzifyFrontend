@@ -286,11 +286,9 @@ export default function Editor() {
           });
           localStorage.setItem('createdFlashcardID', JSON.stringify(response.data)); // backend returns the flashcard object id as a string
           console.log("flashcardID: ", response.data);
-          setDisplayLinkTxt("Link");
           setCreateMsg("");
           navigate('/creations');
         } catch (error) {
-          setDisplayLinkTxt("");
           setCreateMsg("Failed to Create Flashcard Set");
           console.log(error);
         }
@@ -308,11 +306,9 @@ export default function Editor() {
           });
           localStorage.setItem('createdFlashcardID', JSON.stringify(response.data));
           console.log("flashcardID: ", response.data);
-          setDisplayLinkTxt("Link");
           setCreateMsg("");
           navigate('/creations');
         } catch (error) {
-          setDisplayLinkTxt("");
           setCreateMsg("Failed to Create Flashcard Set");
           console.log(error);
         }

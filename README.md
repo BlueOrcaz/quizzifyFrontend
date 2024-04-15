@@ -2,4 +2,4 @@
 ### Full Stack Website with a database
 #### Frontend Stuff:
 - ReactJS
-- NextJS for server hosting prolly
+- Vercel for server hosting prolly

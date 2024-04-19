@@ -53,7 +53,7 @@ export default function Register() {
                     <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" /> {/* Reads the inputted text and assign it the const */}
                 </label>
                 <label>
-                    <input type='text' value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
+                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
                 </label>
                 <label>
                     <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} placeholder="Date of Birth"/>

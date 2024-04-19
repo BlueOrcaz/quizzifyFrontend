@@ -52,7 +52,7 @@
     transform: rotateY(180deg);
 }
 
-.buttons {
+.flashcard-buttons {
     display: flex;
     margin: auto;
 }

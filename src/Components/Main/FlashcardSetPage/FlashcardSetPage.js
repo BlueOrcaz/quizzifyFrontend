@@ -164,7 +164,7 @@ export default function FlashcardSetPage() {
                                 <div dangerouslySetInnerHTML={{ __html: sanitizedBackHTML }} />
                             </div>
                         </div>
-                        <div className='buttons'>
+                        <div className='flashcard-buttons'>
                             {/* previous and next buttons, as well as "flip" button. Plays animation in css */}
                             <button type="button" onClick={showPrevCard}>Previous</button>
                             <button type="button" onClick={flipCard}>Flip</button>

@@ -1,6 +1,7 @@
 import api from '../../../api/axiosConfig'
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import DOMPurify from 'dompurify';
 
 import './FlashcardSetPage.css'; // Importing CSS file
 
@@ -18,10 +19,20 @@ export default function FlashcardSetPage() {
     // front, back - checks whether or not the card is flipped
     const [isFlipped, setIsFlipped] = useState(false);
 
-    // structure for front/back and mcq flashcards.
+    // structure for front/back 
     const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]);
+
+    // sanitized front and back to prevent html attacks
+    const sanitizedFrontHTML = DOMPurify.sanitize(cards[currentId].front);
+    const sanitizedBackHTML = DOMPurify.sanitize(cards[currentId].back);
+    const sanitizedDescription = DOMPurify.sanitize(description);
+
+
+
+    // structure for mcq flashcards
     const [options] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
     const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
+
 
 
     const [correct, setCorrect] = useState('');
@@ -40,6 +51,9 @@ export default function FlashcardSetPage() {
         navigate('/home'); // return back to the dashboard
     }
 
+    const editor = () => {
+        navigate(`/editor/${id}`)
+    }
 
     const showNextCard = (flashcardType) => {
         if (flashcardType === "Front, Back") {
@@ -87,7 +101,7 @@ export default function FlashcardSetPage() {
                 break; // No need to continue checking once we found a 'false' value
             }
         }
-        if(selectedValues.length === 0) {
+        if (selectedValues.length === 0) {
             isCorrect = false;
         }
         // Update the correct state based on the final result
@@ -123,80 +137,92 @@ export default function FlashcardSetPage() {
 
 
     return (
-        <div className='editor-wrapper'>
-            {/* Flashcard Set Details which is taken from the consts and they are taken from api get req */}
-            <h3 >Flashcard Name: {name}</h3>
-            <h4>Description:</h4>
-            <p>{description}</p>
-            <h4>Creation Date: {myDate.toDateString()}</h4>
-            <h4>Set Type: {type}</h4>
-            <br />
+
+        <div className='set-page'>
+            <div className='editor-wrapper'>
+                {/* Flashcard Set Details which is taken from the consts and they are taken from api get req */}
+                <h3 >Flashcard Name: {name}</h3>
+                <h4>Description:</h4>
+                <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+                <h4>Creation Date: {myDate.toDateString()}</h4>
+                <h4>Set Type: {type}</h4>
+                <br />
+
+
+                {/* if the deck type is front, back then itll display differing buttons and ability to flip cards */}
+                {type === 'Front, Back' && (
+                    <div className='front-back-wrapper'>
+                        <div className={`flashcard ${isFlipped ? 'flipped' : ''}`} onClick={flipCard}>
+                            <div className="front">
+                                <p className='p-bold'>Front: </p>
+                                <br></br>
+                                <div dangerouslySetInnerHTML={{ __html: sanitizedFrontHTML }} />
+                            </div>
+                            <div className="back">
+                                <p className='p-bold'>Back: </p>
+                                <br></br>
+                                <div dangerouslySetInnerHTML={{ __html: sanitizedBackHTML }} />
+                            </div>
+                        </div>
+                        <div className='buttons'>
+                            {/* previous and next buttons, as well as "flip" button. Plays animation in css */}
+                            <button type="button" onClick={showPrevCard}>Previous</button>
+                            <button type="button" onClick={flipCard}>Flip</button>
+                            <button type="button" onClick={() => showNextCard("Front, Back")}>Next</button>
+                        </div>
+                    </div>
+                )}
+                {/* if the deck type is mcq then itll display option buttons and prevent user from flipping cards */}
+                {type === 'Multiple Choice' && (
+                    <div>
+                        <div className='multiple-choice-set' >
+                            <div className='question-id'>
+                                Question {multipleChoiceCards[currentId].id}
+                            </div>
+                            <div className='question'>
+                                {multipleChoiceCards[currentId].question}
+                            </div>
+
+                            <div className='options'>
+                                {multipleChoiceCards[currentId].allOptions.map(option => (
+                                    <div>
+                                        {/* Label for each checkbox */}
+                                        <label>
+                                            Option {option.optionId}: <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(option.option) }} />
+                                        </label>
+                                        {/* checkbox which returns the boolean value of the option: if it is correct, it returns true, if not itll return false */}
+                                        <input type="checkbox" id={`option${option.optionId}`} name={`option${option.optionId}`} value={option.correctAnswer} onChange={handleCheckboxChange} />
+                                    </div>
+                                ))}
+
+                            </div>
+                            {/* once submitted it calls to check values and if it is all correct, returns "correct", vice versa */}
+                            <button type='button' onClick={checkValues}>Submit</button>
+                            <p>{correct}</p>
+                        </div>
+                        <br></br>
+                        <div className='buttons'>
+                            {/* previous and next buttons */}
+
+                            <button type="button" onClick={() => showNextCard("Multiple Choice")}>Next</button>
+                            <button type="button" onClick={showPrevCard}>Previous</button>
+                        </div>
+                    </div>
+                )}
+
+
+
+            </div>
+            
+            <br></br>
             <div className='homepage-button'>
                 {/* return to homepage button */}
                 <button type='button' onClick={dashboard} >Return to Homepage</button>
+                <button type='button' onClick={editor}>Edit FlashcardSet</button>
                 <button className='red-button' type='button' onClick={deleteFlashcardSet}>Delete FlashcardSet</button>
             </div>
-            
-            {/* if the deck type is front, back then itll display differing buttons and ability to flip cards */}
-            {type === 'Front, Back' && (
-                <div className='front-back-wrapper'>
-                    <div className={`flashcard ${isFlipped ? 'flipped' : ''}`} onClick={flipCard}>
-                        <div className="front">
-                            <p className='p-bold'>Front: </p>
-                            <br></br>
-                            {cards[currentId].front}
-                        </div>
-                        <div className="back">
-                            <p className='p-bold'>Back: </p>
-                            <br></br>
-                            {cards[currentId].back}
-                        </div>
-                    </div>
-                    <div className='buttons'>
-                        {/* previous and next buttons, as well as "flip" button. Plays animation in css */}
-                        <button type="button" onClick={showPrevCard}>Previous</button>
-                        <button type="button" onClick={flipCard}>Flip</button>
-                        <button type="button" onClick={() => showNextCard("Front, Back")}>Next</button>
-                    </div>
-                </div>
-            )}
-            {/* if the deck type is mcq then itll display option buttons and prevent user from flipping cards */}
-            {type === 'Multiple Choice' && (
-                <div>
-                    <div className='multiple-choice-set' >
-                        <div className='question'>
-                            Question {multipleChoiceCards[currentId].id}
-                        </div>
-                        <div className='options'>
-                            {multipleChoiceCards[currentId].allOptions.map(option => (
-                                <div>
-                                    {/* Label for each checkbox */}
-                                    <label htmlFor={`option${option.optionId}`}>
-                                        Option {option.optionId}:  {option.option}
-                                    </label>
-                                    {/* checkbox which returns the boolean value of the option: if it is correct, it returns true, if not itll return false */}
-                                    <input type="checkbox" id={`option${option.optionId}`} name={`option${option.optionId}`} value={option.correctAnswer} onChange={handleCheckboxChange} />
-                                    
-                                </div>
-                            ))}
-
-                        </div>
-                        {/* Once submitted it calls to check values and if it is all correct, returns "correct", vice versa */}
-                        <button type='button' onClick={checkValues}>Submit</button>
-                        <p>{correct}</p>
-                    </div>
-                    <br></br>
-                    <div className='buttons'>
-                        {/* previous and next buttons */}
-
-                        <button type="button" onClick={() => showNextCard("Multiple Choice")}>Next</button>
-                        <button type="button" onClick={showPrevCard}>Previous</button>
-                    </div>
-                </div>
-            )}
 
         </div>
-
     )
 }
 

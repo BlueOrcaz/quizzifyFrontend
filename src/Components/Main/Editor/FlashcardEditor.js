@@ -1,9 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../../api/axiosConfig';
-import { useNavigate } from 'react-router-dom';
-import '../Editor/Editor.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import '../Editor/FlashcardEditor.css';
 
-export default function Editor() {
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+const modules = {
+  toolbar: [
+    [{ 'header': [2, false] }],
+    ['bold', 'italic', 'underline'],
+    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}]
+  ],
+}
+
+const descriptionModules = {
+  toolbar: [
+    [{ 'header': [2, false] }],
+    ['bold', 'italic', 'underline']
+  ],
+}
+
+
+
+export default function FlashcardsEditor() {
   // general constants
   const [flashcardSetName, setFlashcardSetName] = useState('');
   const [description, setDescription] = useState('');
@@ -11,18 +31,20 @@ export default function Editor() {
 
   // flashcard constants
   const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]);
+  
 
   // multiple choice card constants
   const [options] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
   const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
 
-  // flashcard set id constant
-  const [inputId, setInputId] = useState('');
+
 
   // flashcard creation/update error messages
   const [createMsg, setCreateMsg] = useState('');
   const [updateMsg, setUpdateMsg] = useState('');
-  const [loadMsg, setLoadMsg]  = useState('');
+
+
+  const { id } = useParams();
 
   // retrieve user id
   let userid = localStorage.getItem('currentId');
@@ -33,6 +55,7 @@ export default function Editor() {
   const dashboard = () => {
     navigate('/home'); // return back to the dashboard
   }
+
 
   const addFlashcard = (flashcardType) => { // add a flashcard based off of the two possible flashcard types
     switch (flashcardType) {
@@ -315,56 +338,71 @@ export default function Editor() {
   }
 
   const loadFlashcardDetails = async () => {
-    const response = await api.get(`/api/v1/flashcardSets/${inputId}`); // getter method to retrieve the flashcard set based off of the objectid
+    try {
+      const response = await api.get(`/api/v1/flashcardSets/${id}`); // getter method to retrieve the flashcard set based off of the objectid
     let flashcardType = response.data['setType'];
-    switch (flashcardType) {
-      case "Front, Back":
-        try {
-          //console.log(response.data);
-
-          const updatedCards = response.data["flashcards"].map(card => ({
-            id: card["id"],
-            front: card["front"],
-            back: card["back"]
-          }));
-
-          // update all details based off of the given object from GET request
-          setCards(updatedCards);
-
-
-          setFlashcardSetName(response.data['name']);
-          setDescription(response.data['description']);
-          setFlashcardSetType(response.data['setType']);
-          setMultipleChoiceCards(response.data['mcqFlashcards']);
-        } catch (error) {
-          setLoadMsg("Failed to Load Flashcard Set");
-          console.log(error);
-        }
-        break;
-      case "Multiple Choice":
-        try {
-          //console.log(response.data);
-
-          // update all details based off of the given object from GET request
-          setFlashcardSetName(response.data['name']);
-          setDescription(response.data['description']);
-          setFlashcardSetType(response.data['setType']);
-          setMultipleChoiceCards(response.data['mcqFlashcards']);
-        } catch (error) {
-          setLoadMsg("Failed to Load Flashcard Set");
-          console.log(error);
-        }
-        break;
-      default:
-        break;
+      switch (flashcardType) {
+        case "Front, Back":
+          try {
+            //console.log(response.data);
+  
+            const updatedCards = response.data["flashcards"].map(card => ({
+              id: card["id"],
+              front: card["front"],
+              back: card["back"]
+            }));
+  
+            // update all details based off of the given object from GET request
+            setCards(updatedCards);
+  
+  
+            setFlashcardSetName(response.data['name']);
+            setDescription(response.data['description']);
+            setFlashcardSetType(response.data['setType']);
+            setMultipleChoiceCards(response.data['mcqFlashcards']);
+          } catch (error) {
+            console.log(error);
+            navigate('/editor');
+          }
+          break;
+        case "Multiple Choice":
+          try {
+            //console.log(response.data);
+  
+            // update all details based off of the given object from GET request
+            setFlashcardSetName(response.data['name']);
+            setDescription(response.data['description']);
+            setFlashcardSetType(response.data['setType']);
+            setMultipleChoiceCards(response.data['mcqFlashcards']);
+          } catch (error) {
+            console.log(error);
+            navigate('/editor');
+          }
+          break;
+        default:
+          navigate('/editor');
+          break;
+      }
+    } catch (error) {
+      navigate('/editor');
     }
+    
   }
+
+  // load flashcard sets when there is an id or an id change
+  useEffect(() => {
+    // load flashcard sets only if id is present
+    if (id) {
+      loadFlashcardDetails();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const updateFlashcardSet = async (flashcardType) => {
     switch (flashcardType) {
       case "Front, Back":
         try {
-          await api.put(`/api/v1/flashcardSets/update/${inputId}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves.
+          await api.put(`/api/v1/flashcardSets/update/${id}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves.
             setType: flashcardSetType,
             isPublic: false,
             name: flashcardSetName,
@@ -377,6 +415,7 @@ export default function Editor() {
           });
           //console.log(response.data); debugging
           setUpdateMsg("")
+          navigate('/creations');
         } catch (error) {
           setUpdateMsg("Failed to Update Flashcard Set!")
           console.log(error);
@@ -384,7 +423,7 @@ export default function Editor() {
         break;
       case "Multiple Choice":
         try {
-          await api.put(`/api/v1/flashcardSets/update/${inputId}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves.
+          await api.put(`/api/v1/flashcardSets/update/${id}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves.
             setType: flashcardSetType,
             isPublic: false,
             name: flashcardSetName,
@@ -392,6 +431,7 @@ export default function Editor() {
             mcqFlashcards: multipleChoiceCards
           });
           setUpdateMsg("")
+          navigate('/creations');
           //console.log(response.data);
         } catch (error) {
           setUpdateMsg("Failed to Update Flashcard Set!")
@@ -410,19 +450,14 @@ export default function Editor() {
       <h1 className='editor-h2'>Flashcard Set Editor</h1>
       <form>
         <div className='default-set'>
-          <div className='load-deck'>
-            <label className='card-label'>Load in Existing Flashcard Deck</label> {/* Allows users to load in an object id for any flashcard that they've made */}
-            <input type="text" value={inputId} onChange={(e) => setInputId(e.target.value)} placeholder='Flashcard ID'></input>
-            <button type="button" onClick={loadFlashcardDetails} disabled={inputId === ''}>Load in Exisitng Flashcard Set</button>
-          </div>
-          <p className='creation-error-label'>{loadMsg}</p>
-
+          
           <label className='card-label'>Set Name:</label>
           <input type="text" id='setName' value={flashcardSetName} onChange={(e) => setFlashcardSetName(e.target.value)} placeholder='Flashcard Set Name'></input>
 
           <label className='card-label'>Set Description:</label>
-          <textarea type="text" id='setDesciption' value={description} onChange={(e) => setDescription(e.target.value)} rows="15" className='flashcardset-text-area' placeholder='Flashcard Description'></textarea>
-
+          <div className='quill-editor'>
+            <ReactQuill value={description} onChange={(e) => setDescription(e)} modules={descriptionModules} placeholder='Description'/>
+          </div>
           <div className='set-type'>
             <label className='card-label'>Flashcard Set Type</label>
             <select value={flashcardSetType} onChange={changeFlashcardSetType} className='select-editor'>
@@ -432,7 +467,6 @@ export default function Editor() {
             </select>
           </div>
           <br></br>
-
         </div>
 
         {/* if it is a regular flashcard, then it will render the editor for front, back */}
@@ -449,13 +483,15 @@ export default function Editor() {
                   </div>
                   <p className='card-label'>Front</p>
                   {/* input for the front side of the flashcard */}
-                  <input type="text" value={card.front} onChange={(e) => changeSide(card.id, e.target.value, "Front")} placeholder='Front of Flashcard' />
+                  <ReactQuill value={card.front} onChange={(e) => changeSide(card.id, e, "Front")} modules={modules} placeholder='Front of Flashcard'/>
 
+                  <br></br>
                   <button type='button' onClick={() => clearFlashcardValue(card.id, 'front')} disabled={!card.front}>Clear Front</button>
 
                   <p className='card-label'>Back</p>
                   {/* input for the back side of the flashcard */}
-                  <input type="text" value={card.back} onChange={(e) => changeSide(card.id, e.target.value, "Back")} placeholder='Back of Flashcard' />
+                  <ReactQuill value={card.back} onChange={(e) => changeSide(card.id, e, "Back")} modules={modules} placeholder='Back of Flashcard'/>
+                  <br></br>
                   <button type='button' onClick={() => clearFlashcardValue(card.id, 'back')} disabled={!card.back}>Clear Back</button>
                   <br />
                 </div>
@@ -485,8 +521,12 @@ export default function Editor() {
                   {card.allOptions.map((option, index) => (
                     <div key={index}>
                       <p className='card-label'>Option {index + 1}</p>
-                      <input type="text" value={option.option} onChange={(e) => changeMCQSide(card.id, index, e.target.value)} />
-
+                      <br></br>
+                      <div className='description-reactquill'>
+                      <ReactQuill value={option.option} onChange={(e) => changeMCQSide(card.id, index, e)} modules={modules} placeholder='Option'/>
+                      </div>
+                      
+                      <br></br>
                       <select value={option.correctAnswer} onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)} className='select-editor'>
                         <option value="">Select Answer</option>
                         <option value="true">Correct Option</option>
@@ -517,31 +557,28 @@ export default function Editor() {
 
 
       <div className='editor-buttons'>
-        <br></br>
         {/* calls const based on the click */}
         {/* buttons are disabled when any value is not filled. */}
         <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={
           flashcardSetName === "" ||
           flashcardSetType === "" ||
           description === "" ||
-          inputId !== ""
+          id !== undefined
         }>Create Deck</button>
         {/* Error Messages/created flashcard Link */}
         <p className='creation-error-label'>{createMsg}</p>
-        <br></br>
-        <br></br>
         <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetName === "" ||
           flashcardSetType === "" ||
           description === "" ||
-          inputId === ""
+          id === undefined
         }>Update Flashcard Set</button>
         {/* Error Messages*/}
         <p className='creation-error-label'>{updateMsg}</p>
-        <br></br>
 
         {/* return back to the homepage */}
         <button type='button' onClick={dashboard}>Return to Homepage</button>
       </div>
+      <br></br>
     </div>
   )
 }

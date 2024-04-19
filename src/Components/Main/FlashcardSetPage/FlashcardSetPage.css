@@ -1,3 +1,7 @@
+.set-page {
+    max-height: 75vh;
+}
+
 .flashcard {
     border: 1px solid #ccc;
     width: 400px;
@@ -33,6 +37,7 @@
     border: 5px solid var(--accent);
     width: 600px; 
     padding: 50px; 
+    margin: auto;
     box-sizing: border-box;
 }
 
@@ -48,7 +53,7 @@
 }
 
 .buttons {
-    display: block;
+    display: flex;
     margin: auto;
 }
 
@@ -57,7 +62,13 @@
 }
 
 .homepage-button {
-    width: 75%;
+    display: block;
+    padding: 20px;
+    width: 30wh;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid var(--accent);
+    border-radius: 15px;
 }
 
 .multiple-choice-set {
@@ -79,6 +90,17 @@
     height: 300px;
 }
 
-.question {
+.options label {
+    text-align: center;
+    padding: 10px;
+}
+
+.question-id {
     font-weight: bold;
+}
+
+.question {
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
 }

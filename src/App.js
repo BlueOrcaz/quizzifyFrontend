@@ -7,7 +7,7 @@ import Register from './Components/Account/Register/Register'
 import Homepage from './Components/Main/Homepage/Homepage';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import AccountSettings from './Components/Account/Settings/AccountSettings';
-import Editor from './Components/Main/Editor/Editor';
+import Editor from './Components/Main/Editor/FlashcardEditor';
 import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
 import UserCreations from './Components/Main/UserCreations/UserCreations';
 import FolderEditor from './Components/Main/FolderEditor/FolderEditor';
@@ -32,10 +32,12 @@ function App() {
           {/* If user goes on any other route which isn't this then it will return a 404 error */}
           <Route element={<ErrorPage/>} path='*'/>
 
+
           {/*Only accessible to those in the "user role" */}
           <Route element={<UserRoute/>}>
             <Route element={<Homepage/>} path='/home' />
             <Route element={<Editor/>} path='/editor'/>
+            <Route element={<Editor/>} path='/editor/:id'/>
             <Route element={<FlashcardSetPage/>} path='/flashcardSet/:id'/>
             <Route element={<UserCreations/>} path='/creations'/>
             <Route element={<FolderEditor/>} path='/folderEditor'/>

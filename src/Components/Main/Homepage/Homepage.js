@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../api/axiosConfig';
+import '../Homepage/Homepage.css';
 
 export default function Homepage() {
     const navigate = useNavigate(); // react routes
@@ -11,6 +12,7 @@ export default function Homepage() {
             await api.post('/api/v1/accounts/logout'); // post request to let the backend know you are logged out.
             localStorage.removeItem('currentUser'); 
             localStorage.removeItem('currentRole');
+            localStorage.removeItem('currentId');
             navigate('/login');
         } catch (error) {
             console.error('Error signing out:', error);
@@ -28,15 +30,22 @@ export default function Homepage() {
     const creations = () => {
         navigate('/creations');
     }
+
+    const publicSets = () => {
+        navigate('/allSets');
+    }
     
     return (
         <div>
             <h1>Quizzify Dashboard</h1>
             {/* Call out consts on click */}
             <button type="button" onClick={creations}>Your Flashcard Sets</button>
+            <button type="button" onClick={publicSets}>Public Flashcard Sets</button>
             <button type="button" onClick={quizEditor}>Flashcards Editor</button>
             <button type="button" onClick={accountSettings}>Account Settings</button>
-            <button type="button" onClick={signOut}>Sign Out</button>
+            <div className='signout-button'>
+                <button type="button" onClick={signOut}>Sign Out</button>
+            </div>
         </div>
     )
 }

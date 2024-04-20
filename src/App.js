@@ -11,7 +11,7 @@ import Editor from './Components/Main/Editor/FlashcardEditor';
 import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
 import UserCreations from './Components/Main/UserCreations/UserCreations';
 import FolderEditor from './Components/Main/FolderEditor/FolderEditor';
-
+import PublicSets from './Components/Main/PublicSets/PublicSets';
 
 import ErrorPage from './Components/404/ErrorPage';
 
@@ -42,6 +42,7 @@ function App() {
             <Route element={<UserCreations/>} path='/creations'/>
             <Route element={<FolderEditor/>} path='/folderEditor'/>
             <Route element={<FolderEditor/>} path='/folderEditor/:id'/>
+            <Route element={<PublicSets/>} path='/allSets'/>
           </Route>
 
           {/*Only accessible to those in the "admin role" */}

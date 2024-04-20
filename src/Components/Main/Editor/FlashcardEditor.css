@@ -47,8 +47,7 @@
 
 
 .default-set {
-    width: 100%;
-    max-width: 550px;
+    max-width: 50wh;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -57,8 +56,8 @@
 
 
 .select-editor {
-    height: 40px;
-    width: 250px;
+    height: 50px;
+    width: 100%;
     border-radius: 5px;
 }
 
@@ -74,7 +73,7 @@
     width: 80%;
     padding: 20px;
     border-radius: 15px;
-    margin-top: 30px;
+    margin-top: 5px;
     border: 5px solid var(--accent);
 }
 
@@ -86,7 +85,7 @@
     width: 50vh;
 }
 .mcq-container {
-    width: 80%;
+    width: 50vh;
     padding: 20px;
     border-radius: 15px;
     margin-top: 30px;

@@ -29,6 +29,8 @@ export default function FlashcardsEditor() {
   const [description, setDescription] = useState('');
   const [flashcardSetType, setFlashcardSetType] = useState('');
 
+
+
   // flashcard constants
   const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]);
   
@@ -43,18 +45,31 @@ export default function FlashcardsEditor() {
   const [createMsg, setCreateMsg] = useState('');
   const [updateMsg, setUpdateMsg] = useState('');
 
+  
+
+
 
   const { id } = useParams();
 
   // retrieve user id
   let userid = localStorage.getItem('currentId');
-  let substringuserid = userid.substring(1, userid.length - 1) // remove the stupid double quotations from my string
+  let authorUser = localStorage.getItem('currentUser');
+  let substringAuthorUser = authorUser.substring(1, authorUser.length - 1);
+  let substringuserid = userid.substring(1, userid.length - 1); // remove the stupid double quotations from my string
 
   // utilise react routes
   const navigate = useNavigate();
   const dashboard = () => {
     navigate('/home'); // return back to the dashboard
   }
+
+    // public or not?
+  const [isPublic, setIsPublic] = useState(false);
+  const handlePublic = (e) => {
+    console.log(e.target.checked);
+    setIsPublic(e.target.checked);
+  }
+
 
 
   const addFlashcard = (flashcardType) => { // add a flashcard based off of the two possible flashcard types
@@ -158,7 +173,6 @@ export default function FlashcardsEditor() {
       default:
         break; // not possible to occur 
     }
-
   };
 
 
@@ -293,8 +307,9 @@ export default function FlashcardsEditor() {
         try {
           const response = await api.post("/api/v1/flashcardSets/createFlashcardSet", { // send axios POST request to the backend with the data
             authorId: substringuserid,
+            authorUsername: substringAuthorUser,
             setType: flashcardSetType,
-            isPublic: false,
+            isPublic: isPublic,
             name: flashcardSetName,
             description: description,
             creationDate: Date.now(), // unix time
@@ -305,7 +320,7 @@ export default function FlashcardsEditor() {
             }))
           });
           localStorage.setItem('createdFlashcardID', JSON.stringify(response.data)); // backend returns the flashcard object id as a string
-          console.log("flashcardID: ", response.data);
+          //console.log("flashcardID: ", response.data);
           setCreateMsg("");
           navigate('/creations');
         } catch (error) {
@@ -317,15 +332,16 @@ export default function FlashcardsEditor() {
         try {
           const response = await api.post("/api/v1/flashcardSets/createFlashcardSet", { // send it for mcq cards
             authorId: substringuserid,
+            authorUsername: substringAuthorUser,
             setType: flashcardSetType,
-            isPublic: false,
+            isPublic: isPublic,
             name: flashcardSetName,
             description: description,
             creationDate: Date.now(),
             mcqFlashcards: multipleChoiceCards
           });
           localStorage.setItem('createdFlashcardID', JSON.stringify(response.data));
-          console.log("flashcardID: ", response.data);
+          //console.log("flashcardID: ", response.data);
           setCreateMsg("");
           navigate('/creations');
         } catch (error) {
@@ -351,11 +367,11 @@ export default function FlashcardsEditor() {
               front: card["front"],
               back: card["back"]
             }));
+
   
             // update all details based off of the given object from GET request
             setCards(updatedCards);
-  
-  
+            setIsPublic(response.data['public']);
             setFlashcardSetName(response.data['name']);
             setDescription(response.data['description']);
             setFlashcardSetType(response.data['setType']);
@@ -368,8 +384,8 @@ export default function FlashcardsEditor() {
         case "Multiple Choice":
           try {
             //console.log(response.data);
-  
             // update all details based off of the given object from GET request
+            setIsPublic(response.data['public']);
             setFlashcardSetName(response.data['name']);
             setDescription(response.data['description']);
             setFlashcardSetType(response.data['setType']);
@@ -398,14 +414,15 @@ export default function FlashcardsEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+
   const updateFlashcardSet = async (flashcardType) => {
     switch (flashcardType) {
       case "Front, Back":
         try {
-          await api.put(`/api/v1/flashcardSets/update/${id}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves.
-            setType: flashcardSetType,
-            isPublic: false,
+          await api.put(`/api/v1/flashcardSets/update/${id}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves. 
             name: flashcardSetName,
+            isPublic: isPublic,
+            setType: flashcardSetType,
             description: description,
             flashcards: cards.map(card => ({
               id: card.id,
@@ -425,7 +442,7 @@ export default function FlashcardsEditor() {
         try {
           await api.put(`/api/v1/flashcardSets/update/${id}?authorId=${substringuserid}`, { // put request to update the details, with the userid to prevent other users from updating the flashcard set by themselves.
             setType: flashcardSetType,
-            isPublic: false,
+            isPublic: isPublic,
             name: flashcardSetName,
             description: description,
             mcqFlashcards: multipleChoiceCards
@@ -460,13 +477,15 @@ export default function FlashcardsEditor() {
           </div>
           <div className='set-type'>
             <label className='card-label'>Flashcard Set Type</label>
-            <select value={flashcardSetType} onChange={changeFlashcardSetType} className='select-editor'>
+            <select value={flashcardSetType} onChange={changeFlashcardSetType} className='select-editor' disabled={id !== undefined}>
               <option value="Empty"></option>
               <option value="Front, Back">Front, Back</option>
               <option value="Multiple Choice">Multiple Choice</option>
             </select>
           </div>
           <br></br>
+          <label className='card-label'>Public?</label>
+          <input type="checkbox" checked={isPublic} onChange={ handlePublic}/>
         </div>
 
         {/* if it is a regular flashcard, then it will render the editor for front, back */}
@@ -554,7 +573,7 @@ export default function FlashcardsEditor() {
 
         )}
       </form>
-
+      
 
       <div className='editor-buttons'>
         {/* calls const based on the click */}

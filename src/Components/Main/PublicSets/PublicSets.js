@@ -14,8 +14,8 @@ export default function PublicSets() {
         try {
             const accountResponse = await api.get(`/api/v1/accounts`); // get all accounts 
             const usernames = accountResponse.data.map(user => user.username); // map out only the usernames
+            const flashcardSetResponse = await api.get(`/api/v1/flashcardSets`); // get all flashcards set
             const data = await Promise.all(usernames.map(async (user) => {
-                const flashcardSetResponse = await api.get(`/api/v1/flashcardSets`); // get all flashcards set
                 const userFlashcardSets = flashcardSetResponse.data.filter(flashcardSet => {
                     // filter out flashcard sets which are public as well as the author username equalling to the current user
                     return flashcardSet['public'] === true && flashcardSet['authorUsername'] === user;

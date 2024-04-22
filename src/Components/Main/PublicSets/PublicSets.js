@@ -51,7 +51,7 @@ export default function PublicSets() {
                 {flashcardSets && flashcardSets.length > 0 ? (
                     flashcardSets.map(({user, data}, index) => (
                         <div key={index}>
-                            <label>{user}'s FlashcardSets</label>
+                            <label className='bold-text'>{user}'s FlashcardSets</label>
                             <div className='public-grid'>
                                 {data && data.length > 0  ? ( 
                                      data.map((flashcardSet, setIndex) => (

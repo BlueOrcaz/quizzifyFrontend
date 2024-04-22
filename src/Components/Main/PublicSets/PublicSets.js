@@ -20,7 +20,7 @@ export default function PublicSets() {
                     // filter out flashcard sets which are public as well as the author username equalling to the current user
                     return flashcardSet['public'] === true && flashcardSet['authorUsername'] === user;
                 });
-                console.log({ user, data: userFlashcardSets })
+                //console.log({ user, data: userFlashcardSets }) debug
                 return { user, data: userFlashcardSets };
             }));
             
@@ -48,13 +48,14 @@ export default function PublicSets() {
             </div>
 
             <div className='created-flashcard-sets'>
-                {flashcardSets && flashcardSets.length > 0 ? (
-                    flashcardSets.map(({user, data}, index) => (
+                {flashcardSets && flashcardSets.length > 0 ? ( // if array has entries and length is greater than zero
+                    flashcardSets.map(({user, data}, index) => ( // map out the array into the username, their flashcard set data, and an index
                         <div key={index}>
-                            <label className='bold-text'>{user}'s FlashcardSets</label>
+                            {/* concat value into the label */}
+                            <label className='bold-text'>{user}'s FlashcardSets</label> 
                             <div className='public-grid'>
-                                {data && data.length > 0  ? ( 
-                                     data.map((flashcardSet, setIndex) => (
+                                {data && data.length > 0  ? ( // if there is userdata then 
+                                     data.map((flashcardSet, setIndex) => ( // map out the data with each value being a flashcard obj
                                         <button key={setIndex} className='folder-button' onClick={() => redirect(flashcardSet.id)}>{flashcardSet.name}</button>
                                     ))
                                 ): ( 

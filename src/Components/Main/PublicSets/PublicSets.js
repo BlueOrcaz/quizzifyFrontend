@@ -52,16 +52,21 @@ export default function PublicSets() {
                     flashcardSets.map(({user, data}, index) => (
                         <div key={index}>
                             <label>{user}'s FlashcardSets</label>
-                            <div className='created-folders-grid'>
-                                {data.map((flashcardSet, setIndex) => (
-                                    <button key={setIndex} className='folder-button' onClick={() => redirect(flashcardSet.id)}>{flashcardSet.name}</button>
-                                ))}
+                            <div className='public-grid'>
+                                {data && data.length > 0  ? ( 
+                                     data.map((flashcardSet, setIndex) => (
+                                        <button key={setIndex} className='folder-button' onClick={() => redirect(flashcardSet.id)}>{flashcardSet.name}</button>
+                                    ))
+                                ): ( 
+                                    <p>No Flashcard Sets Available</p>
+                                )}
+                               
                             </div>
                             <br></br>
                         </div>
                     ))
                 ) : (
-                    <p>No Folders available yet.</p>
+                    <p>Empty.</p>
                 )}
             </div>
 

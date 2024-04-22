@@ -196,6 +196,7 @@ export default function FlashcardSetPage() {
                                 ))}
 
                             </div>
+                            <br></br>
                             {/* once submitted it calls to check values and if it is all correct, returns "correct", vice versa */}
                             <button type='button' onClick={checkValues}>Submit</button>
                             <p>{correct}</p>

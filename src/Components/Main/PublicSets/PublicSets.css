@@ -1,0 +1,14 @@
+.public-grid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    max-height: 30vh;
+    max-width: 600px;
+}
+
+.bold-text {
+    font-weight: bold;
+}

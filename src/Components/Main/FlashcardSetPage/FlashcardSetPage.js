@@ -10,9 +10,12 @@ export default function FlashcardSetPage() {
     // constants
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [author, setAuthor] = useState('');
     const [date, setDate] = useState('');
     const [type, setType] = useState('');
 
+    let authorUser = localStorage.getItem('currentUser');
+    let substringAuthorUser = authorUser.substring(1, authorUser.length - 1);
 
     const [currentId, setCurrentId] = useState(0);
 
@@ -52,7 +55,7 @@ export default function FlashcardSetPage() {
     }
 
     const editor = () => {
-        navigate(`/editor/${id}`)
+        navigate(`/editor/${id}`);
     }
 
     const showNextCard = (flashcardType) => {
@@ -113,6 +116,7 @@ export default function FlashcardSetPage() {
             try {
                 const response = await api.get(`/api/v1/flashcardSets/${id}`); // load in details about the flashcard using get request 
                 setName(response.data['name']);
+                setAuthor(response.data['authorUsername']);
                 setDescription(response.data['description']);
                 setDate(response.data['creationDate']);
                 setType(response.data['setType']);
@@ -142,6 +146,7 @@ export default function FlashcardSetPage() {
             <div className='editor-wrapper'>
                 {/* Flashcard Set Details which is taken from the consts and they are taken from api get req */}
                 <h3 >Flashcard Name: {name}</h3>
+                <h4>Flashcard Author: {author}</h4>
                 <h4>Description:</h4>
                 <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
                 <h4>Creation Date: {myDate.toDateString()}</h4>
@@ -218,9 +223,16 @@ export default function FlashcardSetPage() {
             <br></br>
             <div className='homepage-button'>
                 {/* return to homepage button */}
+
+                { author === substringAuthorUser ? (
+                    <div>
+                    <button type='button' onClick={editor}>Edit FlashcardSet</button>
+                    <button className='red-button' type='button' onClick={deleteFlashcardSet}>Delete FlashcardSet</button>
+                    </div>
+                ): (
+                    <button type='button' onClick={editor}>Duplicate Flashcard Set</button>
+                )}
                 <button type='button' onClick={dashboard} >Return to Homepage</button>
-                <button type='button' onClick={editor}>Edit FlashcardSet</button>
-                <button className='red-button' type='button' onClick={deleteFlashcardSet}>Delete FlashcardSet</button>
             </div>
 
         </div>

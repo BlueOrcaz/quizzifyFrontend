@@ -37,7 +37,7 @@ function App() {
           <Route element={<UserRoute/>}>
             <Route element={<Homepage/>} path='/home' />
             <Route element={<Editor/>} path='/editor'/>
-            <Route element={<Editor/>} path='/editor/:id'/>
+            <Route element={<Editor/>} path='/editor/:id'/> 
             <Route element={<FlashcardSetPage/>} path='/flashcardSet/:id'/>
             <Route element={<UserCreations/>} path='/creations'/>
             <Route element={<FolderEditor/>} path='/folderEditor'/>

@@ -24,11 +24,12 @@ const descriptionModules = {
 
 
 export default function FlashcardsEditor() {
+
   // general constants
   const [flashcardSetName, setFlashcardSetName] = useState('');
   const [description, setDescription] = useState('');
   const [flashcardSetType, setFlashcardSetType] = useState('');
-
+  const [author, setAuthor] = useState('');
 
 
   // flashcard constants
@@ -56,6 +57,7 @@ export default function FlashcardsEditor() {
   let authorUser = localStorage.getItem('currentUser');
   let substringAuthorUser = authorUser.substring(1, authorUser.length - 1);
   let substringuserid = userid.substring(1, userid.length - 1); // remove the stupid double quotations from my string
+
 
   // utilise react routes
   const navigate = useNavigate();
@@ -355,7 +357,7 @@ export default function FlashcardsEditor() {
 
   const loadFlashcardDetails = async () => {
     try {
-      const response = await api.get(`/api/v1/flashcardSets/${id}`); // getter method to retrieve the flashcard set based off of the objectid
+    const response = await api.get(`/api/v1/flashcardSets/${id}`); // getter method to retrieve the flashcard set based off of the objectid
     let flashcardType = response.data['setType'];
       switch (flashcardType) {
         case "Front, Back":
@@ -368,7 +370,7 @@ export default function FlashcardsEditor() {
               back: card["back"]
             }));
 
-  
+          
             // update all details based off of the given object from GET request
             setCards(updatedCards);
             setIsPublic(response.data['public']);
@@ -376,6 +378,11 @@ export default function FlashcardsEditor() {
             setDescription(response.data['description']);
             setFlashcardSetType(response.data['setType']);
             setMultipleChoiceCards(response.data['mcqFlashcards']);
+            setAuthor(response.data['authorUsername']);
+            
+            if(response.data['authorUsername'] !== substringAuthorUser) {
+              navigate('/editor');
+            }
           } catch (error) {
             console.log(error);
             navigate('/editor');
@@ -386,10 +393,15 @@ export default function FlashcardsEditor() {
             //console.log(response.data);
             // update all details based off of the given object from GET request
             setIsPublic(response.data['public']);
+            setAuthor(response.data['authorUsername']);
             setFlashcardSetName(response.data['name']);
             setDescription(response.data['description']);
             setFlashcardSetType(response.data['setType']);
             setMultipleChoiceCards(response.data['mcqFlashcards']);
+
+            if(response.data['authorUsername'] !== substringAuthorUser) {
+              navigate('/editor');
+            }
           } catch (error) {
             console.log(error);
             navigate('/editor');
@@ -458,7 +470,6 @@ export default function FlashcardsEditor() {
       default:
         break;
     }
-
   }
 
 
@@ -467,7 +478,7 @@ export default function FlashcardsEditor() {
       <h1 className='editor-h2'>Flashcard Set Editor</h1>
       <form>
         <div className='default-set'>
-          
+          <label>{author}</label>
           <label className='card-label'>Set Name:</label>
           <input type="text" id='setName' value={flashcardSetName} onChange={(e) => setFlashcardSetName(e.target.value)} placeholder='Flashcard Set Name'></input>
 

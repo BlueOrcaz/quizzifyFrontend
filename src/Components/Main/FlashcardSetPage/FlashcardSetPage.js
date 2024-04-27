@@ -141,7 +141,6 @@ export default function FlashcardSetPage() {
 
 
     return (
-
         <div className='set-page'>
             <div className='editor-wrapper'>
                 {/* Flashcard Set Details which is taken from the consts and they are taken from api get req */}

@@ -37,7 +37,7 @@ export default function FlashcardsEditor() {
   
 
   // multiple choice card constants
-  const [options] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
+  const [options, setOptions] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
   const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
 
 
@@ -68,7 +68,6 @@ export default function FlashcardsEditor() {
     // public or not?
   const [isPublic, setIsPublic] = useState(false);
   const handlePublic = (e) => {
-    console.log(e.target.checked);
     setIsPublic(e.target.checked);
   }
 
@@ -181,6 +180,13 @@ export default function FlashcardsEditor() {
 
 
   const changeFlashcardSetType = (e) => { // change flashcard set type when needed
+    // reset all values
+
+    setCards([{ id: 1, front: '', back: '' }]);
+    setMultipleChoiceCards([{ id: 1, question: '', allOptions: options }]);
+    setOptions([{ optionId: 1, option: '', correctAnswer: "" }]);
+
+    // change the flashcard type set
     setFlashcardSetType(e.target.value) // based off of drop down selection
   };
 
@@ -496,7 +502,7 @@ export default function FlashcardsEditor() {
           </div>
           <br></br>
           <label className='card-label'>Public?</label>
-          <input type="checkbox" checked={isPublic} onChange={ handlePublic}/>
+          <input type="checkbox" checked={isPublic} onChange={handlePublic}/>
         </div>
 
         {/* if it is a regular flashcard, then it will render the editor for front, back */}
@@ -555,8 +561,9 @@ export default function FlashcardsEditor() {
                       <div className='description-reactquill'>
                       <ReactQuill value={option.option} onChange={(e) => changeMCQSide(card.id, index, e)} modules={modules} placeholder='Option'/>
                       </div>
-                      
                       <br></br>
+                      <button type='button' onClick={() => clearMCQField(card.id, index)}>Clear Option</button>
+                      <button type='button' onClick={() => removeOption(card.id, index)} disabled={card.allOptions.length === 1}>Remove Option</button>
                       <select value={option.correctAnswer} onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)} className='select-editor'>
                         <option value="">Select Answer</option>
                         <option value="true">Correct Option</option>
@@ -564,9 +571,6 @@ export default function FlashcardsEditor() {
                       </select>
                       <br></br>
                       <br></br>
-                      <button type='button' onClick={() => removeOption(card.id, index)} disabled={card.allOptions.length === 1}>Remove Option</button>
-                      <button type='button' onClick={() => clearMCQField(card.id, index)}>Clear Field</button>
-
                     </div>
                   ))}
                 </div>
@@ -577,8 +581,8 @@ export default function FlashcardsEditor() {
               </div>
             ))}
             <br></br>
-            <div className='mcq-add-button'>
-              <button type='button' onClick={() => addFlashcard('Multiple Choice')}>Add MCQ</button>
+            <div className='add-button'>
+              <button type='button' onClick={() => addFlashcard('Multiple Choice')}>+</button>
             </div>
           </div>
 

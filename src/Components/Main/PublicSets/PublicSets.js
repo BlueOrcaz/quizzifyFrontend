@@ -5,11 +5,6 @@ import '../PublicSets/PublicSets.css';
 
 export default function PublicSets() {
     const [flashcardSets, setFlashcardSets] = useState([]);
-    const navigate = useNavigate();
-    const dashboard = () => {
-        navigate('/home');
-    }
-
     const loadFlashcardSets = async () => {
         try {
             const accountResponse = await api.get(`/api/v1/accounts`); // get all accounts 
@@ -20,7 +15,7 @@ export default function PublicSets() {
                     // filter out flashcard sets which are public as well as the author username equalling to the current user
                     return flashcardSet['public'] === true && flashcardSet['authorUsername'] === user;
                 });
-                //console.log({ user, data: userFlashcardSets }) debug
+                console.log({ user, data: userFlashcardSets }) 
                 return { user, data: userFlashcardSets };
             }));
             
@@ -29,15 +24,22 @@ export default function PublicSets() {
             console.error("Error loading flashcard sets:", error);
         }
     }
+
+    useEffect(() => {
+        loadFlashcardSets();
+    }, []);
+
+    const navigate = useNavigate();
+    const dashboard = () => {
+        navigate('/home');
+    }
     
 
     const redirect = (id) => {
         navigate(`/flashcardSet/${id}`);
     }
 
-    useEffect(() => {
-        loadFlashcardSets();
-    }, []);
+
 
 
     return (
@@ -46,7 +48,6 @@ export default function PublicSets() {
             <div>
                 <button type="button" onClick={dashboard}>Return to Dashboard</button>
             </div>
-
             <div className='created-flashcard-sets'>
                 {flashcardSets && flashcardSets.length > 0 ? ( // if array has entries and length is greater than zero
                     flashcardSets.map(({user, data}, index) => ( // map out the array into the username, their flashcard set data, and an index
@@ -61,7 +62,6 @@ export default function PublicSets() {
                                 ): ( 
                                     <p>No Flashcard Sets Available</p>
                                 )}
-                               
                             </div>
                             <br></br>
                         </div>
@@ -70,9 +70,6 @@ export default function PublicSets() {
                     <p>Empty.</p>
                 )}
             </div>
-
-
         </div>
-
     )
 }

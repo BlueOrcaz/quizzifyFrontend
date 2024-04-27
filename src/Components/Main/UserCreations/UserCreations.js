@@ -83,9 +83,6 @@ export default function UserCreations() {
 
                 </div>
                 <br></br>
-                <div className='dashboard-button'>
-                    <button onClick={folderEditor}>Create Folder</button>
-                </div>
             </div>
             <h2 className='h-load'>Created Flashcard Sets:</h2>
 
@@ -105,9 +102,10 @@ export default function UserCreations() {
             </div>
             <br></br>
             <div className='dashboard-button'>
+                <button onClick={folderEditor}>Create Folder</button>
                 <button type='button' onClick={quizEditor}>Create Flashcard Set</button>
                 <br></br>
-                <button type='button' onClick={dashboard}>Return to Dashboard</button>
+                <button type='button' onClick={dashboard}>Dashboard</button>
             </div>
         </div>
     )

@@ -1,5 +1,6 @@
 
 export default function ErrorPage() {
+    // only occurs when theres an error
     return(
         <div>
             <h1>Quizzify</h1>

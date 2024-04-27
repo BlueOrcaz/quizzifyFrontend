@@ -44,7 +44,7 @@ export default function FolderEditor() {
                 await api.get(`/api/v1/flashcardSets/${flashcardsetid}`);
 
                 if (!flashcardSetIds.includes(flashcardsetid)) {
-                    // If the ID is not a duplicate, add it to the array
+                    // if the id is not a duplicate, add it to the array
                     setFlashcardSetIds(prevArray => [...prevArray, flashcardsetid]);
                     setErrorText('');
                 } else {
@@ -53,7 +53,7 @@ export default function FolderEditor() {
                 }
             } catch (error) {
                 setErrorText('Error Loading Flashcard Set');
-                //console.log("Error adding flashcard set:", error);
+                console.log("Error adding flashcard set:", error);
             }
         }
         // Clear input value after adding to array
@@ -90,7 +90,30 @@ export default function FolderEditor() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
+    const removeFlashcardId = async (flashcardsetid) => {
+        if (flashcardsetid.trim() !== '') {
+            // if the flashcard set is not empty then
+            setFlashcardSetIds(async ids => {
+                const updatedIds = [];
 
+                for (let i = 0; i < ids.length; i++) {
+                    const currentid = ids[i];
+                    if (currentid !== flashcardsetid) {
+                        updatedIds.push(currentid);
+                    }
+                }
+                
+                const setsData = await Promise.all(updatedIds.map(async (setId) => {
+                    const response = await api.get(`/api/v1/flashcardSets/${setId}`);
+                    return { setId, data: response.data };
+                }));
+
+                setFlashcardSetIds(updatedIds); // update the ids
+                setFlashcardSets(setsData); // update the data
+                return updatedIds;
+            })
+        }
+    }
 
     // Update flashcard sets when flashcardSetIds change
     useEffect(() => {
@@ -156,20 +179,23 @@ export default function FolderEditor() {
 
 
     return (
-        <div>
-            <h1 className='folder-editor'>Folder Editor</h1>
+        <div className='folder-editor'>
+            <h1 className='folder-editor-h1'>Folder Editor</h1>
             <form>
                 <label>Folder Name</label>
                 <input type="text" value={folderName} onChange={(e) => setFolderName(e.target.value)} placeholder='Folder Name'></input>
-                <button className='delete-folder-button' type='button' onClick={deleteFolder} disabled={id === undefined}>Delete Folder</button>
+                
                 <label className='labels'>Stored Flashcards</label>
                 <div className='flashcard-set-grid'>
                     {flashcardSets && flashcardSets.length > 0 ? (
                         flashcardSets.map((flashcardSet, index) => (
                             flashcardSet.data ? (
-                                <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
-                                    {flashcardSet.data.name}
-                                </button>
+                                <div>
+                                    <button type='button' className='remove-button' onClick={() => removeFlashcardId(flashcardSet.setId)}>X</button>
+                                    <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
+                                        {flashcardSet.data.name}
+                                    </button>
+                                </div>
                             ) : null
                         ))
                     ) : (
@@ -195,6 +221,7 @@ export default function FolderEditor() {
                 <p className='error-text'>{errorText}</p>
                 <br></br>
                 <div className='folder-buttons'>
+                    <button className='delete-folder-button' type='button' onClick={deleteFolder} disabled={id === undefined}>Delete Folder</button>
                     <button type='button' onClick={updateFolder} disabled={id === undefined}>Save</button>
                     <button type='button' onClick={createFolder} disabled={id !== undefined}>Create Folder</button>
                     <button type='button' onClick={userCreations}>User Creations</button>

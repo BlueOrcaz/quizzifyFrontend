@@ -39,7 +39,7 @@ export default function Homepage() {
         <div>
             <h1>Quizzify Dashboard</h1>
             {/* Call out consts on click */}
-            <button type="button" onClick={creations}>Your Flashcard Sets</button>
+            <button type="button" onClick={creations}>User Creations</button>
             <button type="button" onClick={publicSets}>Public Flashcard Sets</button>
             <button type="button" onClick={quizEditor}>Flashcards Editor</button>
             <button type="button" onClick={accountSettings}>Account Settings</button>

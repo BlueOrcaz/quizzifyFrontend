@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center; 
     border: 5px solid var(--accent);
-    width: 400px; 
+    width: 50vh;
     padding: 20px; 
     box-sizing: border-box;
 }
@@ -21,10 +21,15 @@
 }
 
 .settings-form {
+    width: 45vh;
+}
+
+.account-button {
     width: 100%;
 }
 
 .account-button :disabled {
+    display: none;
     background-color: grey;
     transform: none;
 }

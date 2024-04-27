@@ -1,3 +1,4 @@
+
 .flashcard-editor {
     max-height: 80vh;
 }
@@ -6,6 +7,8 @@
     min-width: 100%;
     max-width: 100%;
 }
+
+
 
 .editor-h2 {
     text-align: center;
@@ -16,6 +19,7 @@
 }
 
 .load-deck button:disabled {
+    display: none;
     transform: none;
     background-color: grey;
 }
@@ -25,6 +29,7 @@
     transform: scale(1.05); 
 }
 .remove-button button:disabled {
+    display: none;
     transform: none;
     background-color: gray;
 }
@@ -41,6 +46,7 @@
 }
 
 .editor-buttons :disabled {
+    display: none;
     transform: none;
     background-color: gray;
 }

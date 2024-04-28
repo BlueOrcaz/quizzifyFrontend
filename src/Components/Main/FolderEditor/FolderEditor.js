@@ -191,7 +191,7 @@ export default function FolderEditor() {
                         flashcardSets.map((flashcardSet, index) => (
                             flashcardSet.data ? (
                                 <div>
-                                    <button type='button' className='remove-button' onClick={() => removeFlashcardId(flashcardSet.setId)}>X</button>
+                                    <button type='button' className='delete-button' onClick={() => removeFlashcardId(flashcardSet.setId)}>X</button>
                                     <button type='button' key={index} className='flashcard-set-button' onClick={() => redirect(flashcardSet.setId)}>
                                         {flashcardSet.data.name}
                                     </button>

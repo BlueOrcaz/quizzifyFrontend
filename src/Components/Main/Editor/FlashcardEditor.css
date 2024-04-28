@@ -28,6 +28,8 @@
     background-color: red;
     transform: scale(1.05); 
 }
+
+
 .remove-button button:disabled {
     display: none;
     transform: none;

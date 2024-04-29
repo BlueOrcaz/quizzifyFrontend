@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Components/Account/Login/Login'
 import Register from './Components/Account/Register/Register'
 import Homepage from './Components/Main/Homepage/Homepage';
-import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import AccountSettings from './Components/Account/Settings/AccountSettings';
 import Editor from './Components/Main/Editor/FlashcardEditor';
 import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
@@ -15,7 +14,6 @@ import PublicSets from './Components/Main/PublicSets/PublicSets';
 
 import ErrorPage from './Components/404/ErrorPage';
 
-import AdminRoute from './util/AdminRoute';
 import UserRoute from './util/UserRoute';
 import BothRoutes from './util/BothRoute';
 

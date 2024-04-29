@@ -45,12 +45,6 @@ function App() {
             <Route element={<PublicSets/>} path='/allSets'/>
           </Route>
 
-          {/*Only accessible to those in the "admin role" */}
-          <Route element={<AdminRoute/>}>
-            <Route element={<AdminDashboard/>} path='/admin'/>
-            
-          </Route>
-
           {/*Accessible to both routes */} 
           <Route element={<BothRoutes/>}>
             <Route element={<AccountSettings/>} path='/accountsettings'/>

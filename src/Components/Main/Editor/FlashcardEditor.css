@@ -39,10 +39,10 @@
 .editor-buttons {
     text-align: center;
     margin: auto;
-    padding: 30px; 
+    padding: 20px; 
     display: block;
     font-size: 14px; 
-    width: 50wh; 
+    width: 40vh; 
     border: 5px solid var(--accent);
     border-radius: 15px;
 }

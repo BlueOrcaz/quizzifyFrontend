@@ -596,14 +596,12 @@ export default function FlashcardsEditor() {
         <button type='button' onClick={() => createDeck(flashcardSetType)} disabled={
           flashcardSetName === "" ||
           flashcardSetType === "" ||
-          description === "" ||
           id !== undefined
         }>Create Deck</button>
         {/* Error Messages/created flashcard Link */}
         <p className='creation-error-label'>{createMsg}</p>
         <button type='button' onClick={() => updateFlashcardSet(flashcardSetType)} disabled={flashcardSetName === "" ||
           flashcardSetType === "" ||
-          description === "" ||
           id === undefined
         }>Update Flashcard Set</button>
         {/* Error Messages*/}

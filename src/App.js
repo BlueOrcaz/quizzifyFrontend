@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Components/Account/Login/Login'
 import Register from './Components/Account/Register/Register'
 import Homepage from './Components/Main/Homepage/Homepage';
-import AccountSettings from './Components/Account/Settings/AccountSettings';
 import Editor from './Components/Main/Editor/FlashcardEditor';
 import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPage';
 import UserCreations from './Components/Main/UserCreations/UserCreations';
@@ -15,7 +14,6 @@ import PublicSets from './Components/Main/PublicSets/PublicSets';
 import ErrorPage from './Components/404/ErrorPage';
 
 import UserRoute from './util/UserRoute';
-import BothRoutes from './util/BothRoute';
 
 function App() {
   return (
@@ -41,13 +39,7 @@ function App() {
             <Route element={<FolderEditor/>} path='/folderEditor'/>
             <Route element={<FolderEditor/>} path='/folderEditor/:id'/>
             <Route element={<PublicSets/>} path='/allSets'/>
-          </Route>
-
-          {/*Accessible to both routes */} 
-          <Route element={<BothRoutes/>}>
-            <Route element={<AccountSettings/>} path='/accountsettings'/>
-          </Route>
-          
+          </Route>    
         </Routes>
       </BrowserRouter>
     </div>

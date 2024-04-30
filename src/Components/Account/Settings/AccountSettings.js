@@ -5,23 +5,19 @@ import api from '../../../api/axiosConfig';
 import '../Settings/AccountSettings.css'
 
 export default function AccountSettings() {
-    const[username, setUsername] = useState('');
-    const[currentPassword, setCurrentPassword] = useState('');
-    const[newPassword, setNewPassword] = useState('');
-    const[dateOfBirth, setDateOfBirth] = useState('');
-    const[email, setEmail] = useState('');
-    const[educationalRole, setEducationalRole] = useState('');
+    const[username, setUsername] = useState(''); // username input
+    const[currentPassword, setCurrentPassword] = useState(''); // current password 
+    const[newPassword, setNewPassword] = useState(''); // new password
+    const[dateOfBirth, setDateOfBirth] = useState(''); // current date of birth
+    const[email, setEmail] = useState(''); // current email
+    const[educationalRole, setEducationalRole] = useState(''); // currnent educational role
 
-    const[status, setStatus] = useState('');
+    const[status, setStatus] = useState(''); // message when an error occurs
     
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // react routes
 
     const returnHomepage = () => {
-        if(localStorage.getItem('currentRole') === '"Admin"') {
-            navigate("/admin");
-        } else {
-            navigate("/home"); // routes
-        }
+        navigate("/home"); // return to the homepage
     }
 
 
@@ -31,12 +27,12 @@ export default function AccountSettings() {
     const loadDetails = async () => {
         try {      
             const response = await api.get(`/api/v1/accounts/${substringuserid}`); // get request to the end user
-            setUsername(response.data['username']);
-            setDateOfBirth(response.data['dateOfBirth']);
-            setEmail(response.data['email']);
+            setUsername(response.data['username']); // fill in details
+            setDateOfBirth(response.data['dateOfBirth']); // fill in details
+            setEmail(response.data['email']); // fill in details
             setEducationalRole(response.data['educationalRole']);
         } catch (error) {
-            console.log(error);
+            console.log(error); // return an error if the account cannot be retrieves
         }
     
     }
@@ -44,17 +40,17 @@ export default function AccountSettings() {
 
     const deleteAccount = async () => {
         try {
-            await api.delete(`/api/v1/accounts/deleteAccount/${substringuserid}`, {
+            await api.delete(`/api/v1/accounts/deleteAccount/${substringuserid}`, { // send DELETE request
                 params: {
-                    currentPassword: currentPassword.toString()
+                    currentPassword: currentPassword.toString() // parameters required to delete an account
                 }
             });
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('currentRole');
-            navigate('/login');
+            localStorage.removeItem('currentUser'); // remove the current user so another account can be made
+            localStorage.removeItem('currentRole'); // remove the current role so another account can be made
+            navigate('/login'); // return to login page
         } catch (error) {
-            setStatus('Enter in your current password to delete account');
-            console.log(error);
+            setStatus('Enter in your current password to delete account'); // inform end user on the instructions
+            //console.log(error);
         }
     }
     

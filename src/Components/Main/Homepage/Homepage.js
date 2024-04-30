@@ -7,38 +7,38 @@ export default function Homepage() {
     const navigate = useNavigate(); // react routes
 
     const signOut = async (e) => {
-        e.preventDefault(); // prevent default error from occurring
+        e.preventDefault(); 
         try {
             await api.post('/api/v1/accounts/logout'); // post request to let the backend know you are logged out.
-            localStorage.removeItem('currentUser'); 
+            localStorage.removeItem('currentUser'); // remove the current details so that itll display flashcards properly 
             localStorage.removeItem('currentRole');
             localStorage.removeItem('currentId');
-            navigate('/login');
+            navigate('/login'); // return to login page
         } catch (error) {
             console.error('Error signing out:', error);
         }
     };
 
-    const accountSettings = () => {
+    const accountSettings = () => { // navigate to the settings page
         navigate('/accountsettings');
     }
 
-    const quizEditor = () => {
+    const quizEditor = () => { // navigate to the editor
         navigate('/editor');
     }
 
-    const creations = () => {
+    const creations = () => { // navigate to user creations
         navigate('/creations');
     }
 
-    const publicSets = () => {
+    const publicSets = () => { // navigate to all public flashcard sets
         navigate('/allSets');
     }
     
     return (
         <div>
             <h1>Quizzify Dashboard</h1>
-            {/* Call out consts on click */}
+            {/* Call out functions on click */}
             <button type="button" onClick={creations}>User Creations</button>
             <button type="button" onClick={publicSets}>Public Flashcard Sets</button>
             <button type="button" onClick={quizEditor}>Flashcards Editor</button>

@@ -6,15 +6,15 @@ import '../Register/Register.css'
 
 
 export default function Register() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('');
-    const [email, setEmail] = useState('');
-    const [educationalRole, setEducationalRole] = useState('');
+    const [username, setUsername] = useState(''); // stores username input
+    const [password, setPassword] = useState(''); // stores password input
+    const [dateOfBirth, setDateOfBirth] = useState(''); // stores date of birth input
+    const [email, setEmail] = useState(''); // stores email input
+    const [educationalRole, setEducationalRole] = useState(''); // stores educational role input
 
     const navigate = useNavigate();
     const login = () => {
-        navigate('/login')
+        navigate('/login'); // navigate to the login page when called.
     }
 
     const createAccount = async (e) => {
@@ -31,12 +31,11 @@ export default function Register() {
                 createdFoldersArrayList: [] 
             })
             .then(function () {
-                console.log("Account has been successfully created!");
+                //console.log("Account has been successfully created!");
                 navigate("/login");
             })
             .catch(function (error) {
-                
-                console.log("Error:" + error);
+                console.log("Error:" + error); // call an error in the console
             });
 
         } catch (error) {
@@ -48,21 +47,21 @@ export default function Register() {
     return (
         <div className='register-wrapper'>
             <h1>Sign Up</h1>
-            <form onSubmit={createAccount} className='register-form'> {/* Calls the api */}
+            <form onSubmit={createAccount} className='register-form'> {/* calls the API to register an account */}
                 <label>
-                    <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" /> {/* Reads the inputted text and assign it the const */}
+                    <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" /> {/* reads the inputted text */}
                 </label>
                 <label>
-                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
+                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/> {/* reads the inputted text */}
                 </label>
                 <label>
-                    <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} placeholder="Date of Birth"/>
+                    <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} placeholder="Date of Birth"/> {/* reads the inputted text */}
                 </label>
                 <label>
-                    <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
+                    <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/> {/* reads the inputted text */}
                 </label>
                 <label>
-                    <input type='text' value={educationalRole} onChange={(e) => setEducationalRole(e.target.value)} placeholder="Educational Role"/>
+                    <input type='text' value={educationalRole} onChange={(e) => setEducationalRole(e.target.value)} placeholder="Educational Role"/> {/* reads the inputted text */}
                 </label>
                 <div>
                     <button type='submit'>Submit</button>

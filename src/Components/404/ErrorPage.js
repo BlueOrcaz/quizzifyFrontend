@@ -1,6 +1,6 @@
 
 export default function ErrorPage() {
-    // only occurs when theres an error
+    // only occurs when theres an error in the link directory
     return(
         <div>
             <h1>Quizzify</h1>

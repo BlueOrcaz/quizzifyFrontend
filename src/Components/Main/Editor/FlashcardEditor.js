@@ -24,33 +24,28 @@ const descriptionModules = {
 
 
 export default function FlashcardsEditor() {
-
   // general constants
-  const [flashcardSetName, setFlashcardSetName] = useState('');
-  const [description, setDescription] = useState('');
-  const [flashcardSetType, setFlashcardSetType] = useState('');
-  const [author, setAuthor] = useState('');
+  const [flashcardSetName, setFlashcardSetName] = useState(''); // input
+  const [description, setDescription] = useState(''); // input
+  const [flashcardSetType, setFlashcardSetType] = useState(''); // input
+  const [author, setAuthor] = useState(''); // input
 
 
   // flashcard constants
-  const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]);
+  const [cards, setCards] = useState([{ id: 1, front: '', back: '' }]); // each flashcard index will consist of another array with all values for easy access
   
 
   // multiple choice card constants
-  const [options, setOptions] = useState([{ optionId: 1, option: '', correctAnswer: "" }]);
-  const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]);
-
+  const [options, setOptions] = useState([{ optionId: 1, option: '', correctAnswer: "" }]); // singular index in the allOptions part of the array
+  const [multipleChoiceCards, setMultipleChoiceCards] = useState([{ id: 1, question: '', allOptions: options }]); // consists of id, q and all the possible options
 
 
   // flashcard creation/update error messages
   const [createMsg, setCreateMsg] = useState('');
   const [updateMsg, setUpdateMsg] = useState('');
 
-  
 
-
-
-  const { id } = useParams();
+  const { id } = useParams(); // get the values from the flashcard set page.
 
   // retrieve user id
   let userid = localStorage.getItem('currentId');
@@ -153,8 +148,8 @@ export default function FlashcardsEditor() {
             }
           }
 
-          refreshIds(updatedCards, "Multiple Choice");
-          return updatedCards;
+          refreshIds(updatedCards, "Multiple Choice"); // refresh the ids so they start from 1
+          return updatedCards; 
         })
         break;
       default:

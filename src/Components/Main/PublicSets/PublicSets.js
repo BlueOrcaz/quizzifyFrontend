@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../PublicSets/PublicSets.css';
 
 export default function PublicSets() {
-    const [flashcardSets, setFlashcardSets] = useState([]);
+    const [flashcardSets, setFlashcardSets] = useState([]); // store all public flashcard sets inside a singular array
     const loadFlashcardSets = async () => {
         try {
             const accountResponse = await api.get(`/api/v1/accounts`); // get all accounts 
@@ -15,27 +15,27 @@ export default function PublicSets() {
                     // filter out flashcard sets which are public as well as the author username equalling to the current user
                     return flashcardSet['public'] === true && flashcardSet['authorUsername'] === user;
                 });
-                console.log({ user, data: userFlashcardSets }) 
-                return { user, data: userFlashcardSets };
+                //console.log({ user, data: userFlashcardSets }) 
+                return { user, data: userFlashcardSets }; // each entry in usernames array will consist of the username, as well as their flashcard set data
             }));
             
-            setFlashcardSets(data);
+            setFlashcardSets(data); // update the array list
         } catch (error) {
             console.error("Error loading flashcard sets:", error);
         }
     }
 
     useEffect(() => {
-        loadFlashcardSets();
-    }, []);
+        loadFlashcardSets(); // when the page loads load all flashcard sets once
+    }, []); // [] means that it loads only once
 
     const navigate = useNavigate();
-    const dashboard = () => {
+    const dashboard = () => { // return back to homepage
         navigate('/home');
     }
     
 
-    const redirect = (id) => {
+    const redirect = (id) => { // go to a specific flashcard set id
         navigate(`/flashcardSet/${id}`);
     }
 

@@ -44,10 +44,7 @@
 
 .front, .back {
     position: absolute;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 85%;
+    width: 90%;
     height: 90%;
     backface-visibility: hidden;
 }

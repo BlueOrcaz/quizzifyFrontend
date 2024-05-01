@@ -358,64 +358,57 @@ export default function FlashcardsEditor() {
 
   const loadFlashcardDetails = async () => {
     try {
-    const response = await api.get(`/api/v1/flashcardSets/${id}`); // getter method to retrieve the flashcard set based off of the objectid
-    let flashcardType = response.data['setType'];
-      switch (flashcardType) {
-        case "Front, Back":
+      const response = await api.get(`/api/v1/flashcardSets/${id}`); // GET method to retrive the flashcard set based off of the objectID
+      let flashcardType = response.data['setType']; // set the flashcard type from the data retrieved
+      switch (flashcardType) { // switch case statement dependent on the flashcard type
+        case "Front, Back": // if the flashcard type is a double-sided flashcard type
           try {
-            //console.log(response.data);
-  
-            const updatedCards = response.data["flashcards"].map(card => ({
+            const updatedCards = response.data["flashcards"].map(card => ({ // map out each flashcard in the array as an index which consists of the id, front and back
               id: card["id"],
               front: card["front"],
               back: card["back"]
             }));
-
-          
             // update all details based off of the given object from GET request
-            setCards(updatedCards);
-            setIsPublic(response.data['public']);
-            setFlashcardSetName(response.data['name']);
-            setDescription(response.data['description']);
-            setFlashcardSetType(response.data['setType']);
-            setMultipleChoiceCards(response.data['mcqFlashcards']);
-            setAuthor(response.data['authorUsername']);
-            
-            if(response.data['authorUsername'] !== substringAuthorUser) {
-              navigate('/editor');
+            setCards(updatedCards); // update the cards array
+            setIsPublic(response.data['public']); // set the checkbox
+            setFlashcardSetName(response.data['name']); // set the name
+            setDescription(response.data['description']); // set the description
+            setFlashcardSetType(response.data['setType']); // set the flashcard set type
+            setAuthor(response.data['authorUsername']); // set the author
+
+            if (response.data['authorUsername'] !== substringAuthorUser) { // if a flashcard set is duplicated instead
+              navigate('/editor'); // load the data, however get rid of the id parameter
             }
           } catch (error) {
-            console.log(error);
-            navigate('/editor');
+            console.log(error); // if an error occurs
+            navigate('/editor'); // reset
           }
           break;
-        case "Multiple Choice":
+        case "Multiple Choice": // if the flashcard type is a multiple choice flashcard type
           try {
-            //console.log(response.data);
             // update all details based off of the given object from GET request
-            setIsPublic(response.data['public']);
-            setAuthor(response.data['authorUsername']);
-            setFlashcardSetName(response.data['name']);
-            setDescription(response.data['description']);
-            setFlashcardSetType(response.data['setType']);
-            setMultipleChoiceCards(response.data['mcqFlashcards']);
+            setIsPublic(response.data['public']); // set the checkbox
+            setAuthor(response.data['authorUsername']); // set the author
+            setFlashcardSetName(response.data['name']); // set the name
+            setDescription(response.data['description']); // set description
+            setFlashcardSetType(response.data['setType']); // set type drop down menu
+            setMultipleChoiceCards(response.data['mcqFlashcards']); // set the mcq array
 
-            if(response.data['authorUsername'] !== substringAuthorUser) {
-              navigate('/editor');
+            if (response.data['authorUsername'] !== substringAuthorUser) { // if a flashcard set is duplicated instead
+              navigate('/editor'); // load the data, but get rid of id param
             }
-          } catch (error) {
+          } catch (error) { // catch error
             console.log(error);
             navigate('/editor');
           }
           break;
-        default:
+        default: // default case if theres no type, then navigate to editor
           navigate('/editor');
           break;
       }
     } catch (error) {
       navigate('/editor');
     }
-    
   }
 
   // load flashcard sets when there is an id or an id change

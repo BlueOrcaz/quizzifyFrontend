@@ -111,27 +111,27 @@ export default function FlashcardSetPage() {
         setCorrect(isCorrect ? 'Correct' : 'Incorrect'); // if it is correct, then setcorrect to "correct". if not then set to incorrect
     }
 
-    useEffect(() => { // so it prevents multiple api get requests
-        const fetchFlashcardDetails = async () => {
-            try {
-                const response = await api.get(`/api/v1/flashcardSets/${id}`); // load in details about the flashcard using get request 
-                setName(response.data['name']);
-                setAuthor(response.data['authorUsername']);
-                setDescription(response.data['description']);
-                setDate(response.data['creationDate']);
-                setType(response.data['setType']);
-                setMultipleChoiceCards(response.data['mcqFlashcards']);
-                const updatedCards = response.data['flashcards'].map(card => ({
-                    id: card['id'],
-                    front: card['front'],
-                    back: card['back']
-                }))
-                setCards(updatedCards);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const fetchFlashcardDetails = async () => {
+        try {
+            const response = await api.get(`/api/v1/flashcardSets/${id}`); // load in details about the flashcard using get request 
+            setName(response.data['name']);
+            setAuthor(response.data['authorUsername']);
+            setDescription(response.data['description']);
+            setDate(response.data['creationDate']);
+            setType(response.data['setType']);
+            setMultipleChoiceCards(response.data['mcqFlashcards']);
+            const updatedCards = response.data['flashcards'].map(card => ({
+                id: card['id'],
+                front: card['front'],
+                back: card['back']
+            }))
+            setCards(updatedCards);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
+    useEffect(() => { // so it prevents multiple api get requests
         fetchFlashcardDetails();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

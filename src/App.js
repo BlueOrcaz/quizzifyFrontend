@@ -10,6 +10,7 @@ import FlashcardSetPage from './Components/Main/FlashcardSetPage/FlashcardSetPag
 import UserCreations from './Components/Main/UserCreations/UserCreations';
 import FolderEditor from './Components/Main/FolderEditor/FolderEditor';
 import PublicSets from './Components/Main/PublicSets/PublicSets';
+import AccountSettings from './Components/Account/Settings/AccountSettings';
 
 import ErrorPage from './Components/404/ErrorPage';
 
@@ -39,6 +40,7 @@ function App() {
             <Route element={<FolderEditor/>} path='/folderEditor'/>
             <Route element={<FolderEditor/>} path='/folderEditor/:id'/>
             <Route element={<PublicSets/>} path='/allSets'/>
+            <Route element={<AccountSettings/>} path='/accountsettings'/>
           </Route>    
         </Routes>
       </BrowserRouter>

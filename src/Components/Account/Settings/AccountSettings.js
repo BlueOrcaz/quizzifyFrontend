@@ -39,18 +39,21 @@ export default function AccountSettings() {
 
 
     const deleteAccount = async () => {
-        try {
-            await api.delete(`/api/v1/accounts/deleteAccount/${substringuserid}`, { // send DELETE request
-                params: {
-                    currentPassword: currentPassword.toString() // parameters required to delete an account
-                }
-            });
-            localStorage.removeItem('currentUser'); // remove the current user so another account can be made
-            localStorage.removeItem('currentRole'); // remove the current role so another account can be made
-            navigate('/login'); // return to login page
-        } catch (error) {
-            setStatus('Enter in your current password to delete account'); // inform end user on the instructions
-            //console.log(error);
+        const confirm = window.confirm("Are you sure you want to delete your account? This action cannot be undone."); // Confirmation dialog
+        if(confirm) {
+            try {
+                await api.delete(`/api/v1/accounts/deleteAccount/${substringuserid}`, { // send DELETE request
+                    params: {
+                        currentPassword: currentPassword.toString() // parameters required to delete an account
+                    }
+                });
+                localStorage.removeItem('currentUser'); // remove the current user so another account can be made
+                localStorage.removeItem('currentRole'); // remove the current role so another account can be made
+                navigate('/login'); // return to login page
+            } catch (error) {
+                setStatus('Enter in your current password to delete account'); // inform end user on the instructions
+                //console.log(error);
+            }
         }
     }
     
@@ -58,29 +61,32 @@ export default function AccountSettings() {
 
 
     const updateDetails = async (e) => {
+        const confirm = window.confirm("Are you sure you want to update your account?")
         e.preventDefault();
-        try {
-            await api.put(`/api/v1/accounts/update/${substringuserid}`, {
-                username: username,
-                email: email,
-                dateOfBirth: dateOfBirth,
-                educationalRole: educationalRole,
-                password: newPassword // Always include newPassword, it may be empty
-            }, {
-                params: {
-                    currentPassword: currentPassword // need to pass the current password to verify their changes
-                }
-            })
-            .then(response => {
-                //console.log("Account updated successfully", response.data);
-                setStatus('Account Updated Successfully!');
-            })
-            .catch(error => {
-                setStatus('Please double-check your password!');
-                console.error(error);
-            });
-        } catch (e) {
-            console.log(e);
+        if (confirm) {
+            try {
+                await api.put(`/api/v1/accounts/update/${substringuserid}`, {
+                    username: username,
+                    email: email,
+                    dateOfBirth: dateOfBirth,
+                    educationalRole: educationalRole,
+                    password: newPassword // Always include newPassword, it may be empty
+                }, {
+                    params: {
+                        currentPassword: currentPassword // need to pass the current password to verify their changes
+                    }
+                })
+                .then(response => {
+                    //console.log("Account updated successfully", response.data);
+                    setStatus('Account Updated Successfully!');
+                })
+                .catch(error => {
+                    setStatus('Please double-check your password!');
+                    console.error(error);
+                });
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
     
@@ -108,10 +114,10 @@ export default function AccountSettings() {
                     <input type='password' onChange={(e) => setNewPassword(e.target.value)} placeholder='New Password'/>
                 </label>
                 <label>
-                    <input defaultValue={dateOfBirth} type='text' onChange={(e) => setDateOfBirth(e.target.value)} placeholder='Date Of Birth'/>
+                    <input defaultValue={dateOfBirth} type='date' onChange={(e) => setDateOfBirth(e.target.value)} placeholder='Date Of Birth'/>
                 </label>
                 <label>
-                    <input defaultValue={email} type='text' onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
+                    <input defaultValue={email} type='email' onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
                 </label>
                 <label>
                     <input defaultValue={educationalRole} type='text' onChange={(e) => setEducationalRole(e.target.value)} placeholder='Educational Role'/>

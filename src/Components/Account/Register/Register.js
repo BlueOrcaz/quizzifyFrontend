@@ -11,6 +11,7 @@ export default function Register() {
     const [dateOfBirth, setDateOfBirth] = useState(''); // stores date of birth input
     const [email, setEmail] = useState(''); // stores email input
     const [educationalRole, setEducationalRole] = useState(''); // stores educational role input
+    const [errMsg, setErrMsg] = useState('');
 
     const navigate = useNavigate();
     const login = () => {
@@ -35,6 +36,7 @@ export default function Register() {
                 navigate("/login");
             })
             .catch(function (error) {
+                setErrMsg("An Error Occured.");
                 console.log("Error:" + error); // call an error in the console
             });
 
@@ -55,14 +57,15 @@ export default function Register() {
                     <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/> {/* reads the inputted text */}
                 </label>
                 <label>
-                    <input type='text' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} placeholder="Date of Birth"/> {/* reads the inputted text */}
+                    <input type='date' value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} placeholder="Date of Birth"/> {/* reads the inputted text */}
                 </label>
                 <label>
-                    <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/> {/* reads the inputted text */}
+                    <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/> {/* reads the inputted text */}
                 </label>
                 <label>
                     <input type='text' value={educationalRole} onChange={(e) => setEducationalRole(e.target.value)} placeholder="Educational Role"/> {/* reads the inputted text */}
                 </label>
+                <label>{errMsg}</label>
                 <div>
                     <button type='submit'>Submit</button>
                     <button onClick={login}>Login Page</button>  {/* Navigate back to login page */}

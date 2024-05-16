@@ -275,7 +275,7 @@ export default function FlashcardsEditor() {
     })
   }
 
-  const clearMCQField = (id, optionIndex) => {
+  const clearMCQOption = (id, optionIndex) => {
     setMultipleChoiceCards(previousCards => { // update the previous cards.
       return previousCards.map(card => {
         if (card.id === id) {
@@ -292,7 +292,7 @@ export default function FlashcardsEditor() {
     });
   };
 
-  const clearMCQQuestion = (id) => {
+  const clearMCQ = (id) => {
     setMultipleChoiceCards(previousCards => { // update previous cards
       return previousCards.map(card => {
         if (card.id === id) {
@@ -540,7 +540,7 @@ export default function FlashcardsEditor() {
                 </div>
                 <p className='card-label'>Question</p>
                 <input type="text" value={card.question} onChange={(e) => changeMCQuestion(card.id, e.target.value)} />
-                <button type='button' onClick={() => clearMCQQuestion(card.id)}>Clear Question</button>
+                <button type='button' onClick={() => clearMCQ(card.id)}>Clear Question</button>
                 <div>
                   {card.allOptions.map((option, index) => (
                     <div key={index}>
@@ -550,7 +550,7 @@ export default function FlashcardsEditor() {
                       <ReactQuill value={option.option} onChange={(e) => changeMCQSide(card.id, index, e)} modules={modules} placeholder='Option'/>
                       </div>
                       <br></br>
-                      <button type='button' onClick={() => clearMCQField(card.id, index)}>Clear Option</button>
+                      <button type='button' onClick={() => clearMCQOption(card.id, index)}>Clear Option</button>
                       <button type='button' onClick={() => removeOption(card.id, index)} disabled={card.allOptions.length === 1}>Remove Option</button>
                       <select value={option.correctAnswer} onChange={(e) => changeMCQAnswer(card.id, index, e.target.value)} className='select-editor'>
                         <option value="">Select Answer</option>

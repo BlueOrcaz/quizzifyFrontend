@@ -5,7 +5,7 @@ import '../PublicSets/PublicSets.css';
 
 export default function PublicSets() {
     const [flashcardSets, setFlashcardSets] = useState([]); // store all public flashcard sets inside a singular array
-    const loadFlashcardSets = async () => {
+    const loadPublicSets = async () => {
         try {
             const accountResponse = await api.get(`/api/v1/accounts`); // get all accounts 
             const usernames = accountResponse.data.map(user => user.username); // map out only the usernames
@@ -26,7 +26,7 @@ export default function PublicSets() {
     }
 
     useEffect(() => {
-        loadFlashcardSets(); // when the page loads load all flashcard sets once
+        loadPublicSets(); // when the page loads load all flashcard sets once
     }, []); // [] means that it loads only once
 
     const navigate = useNavigate();

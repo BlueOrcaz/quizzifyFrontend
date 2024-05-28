@@ -35,9 +35,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center; 
-    border: 5px solid var(--accent);
-    max-width: 45vh;
-    padding: 15px; 
+
+    width: 55vh;
+    padding: 25px; 
     margin: auto;
     box-sizing: border-box;
 }
@@ -73,7 +73,7 @@
 }
 
 .multiple-choice-set {
-    max-height: 100wh;
+    max-height: 30wh;
     background-color: var(--background);
     border-radius: 15px;
     display: flex;
@@ -81,9 +81,8 @@
     align-items: center;
     justify-content: center; 
     border: 5px solid var(--accent);
-    width: 400px; 
-    height: 500px;
-    padding: 20px; 
+    width: 35vh; 
+    padding: 25px; 
     box-sizing: border-box;
 }
 
